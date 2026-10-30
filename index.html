@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simo: seven worlds of games, apps and AI tools</title>
+  <meta name="description" content="Simo is 16 and builds software in Casablanca. Scroll through seven worlds: a local AI assistant, a browser tactical shooter, a fantasy RPG, sites for real businesses and motion films, guided by a robot rebuilt from his own game." />
+  <meta name="theme-color" content="#05060f" />
+  <link rel="canonical" href="https://semo-el.github.io/Portfolio_V3/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Simo: seven worlds" />
+  <meta property="og:description" content="A scroll-through portfolio: SimoAI, Ironline, Mana Vessel, real client sites and films, from a 16-year-old builder in Casablanca." />
+  <meta property="og:image" content="https://semo-el.github.io/Portfolio_V3/images/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bangers&family=Darker+Grotesque:wght@600;900&family=JetBrains+Mono:wght@500&family=Limelight&family=New+Rocker&family=Outfit:wght@400;900&family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Poppins:wght@600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/site.css" />
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#origins">Skip the intro</a>
+
+  <!-- the worlds are painted behind and around the page -->
+  <canvas class="layer-bg" id="bg" aria-hidden="true"></canvas>
+  <canvas class="layer-fg" id="fg" aria-hidden="true"></canvas>
+  <div class="bubble" id="bubble" role="status" aria-live="polite" hidden></div>
+
+  <!-- ================================================================ HUD -->
+  <header class="hud" id="hud">
+    <a class="hud-mark" href="#start" aria-label="Simo, back to the start">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" stroke-width="4"/><path d="M41.5 21.5a10 10 0 1 0-9.5 10.5a10 10 0 1 1-9.5 10.5" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
+      <span>Simo</span>
+    </a>
+    <p class="hud-world"><span class="hud-dot" aria-hidden="true"></span><span id="worldName">Deep space</span></p>
+    <div class="hud-right">
+    <button class="hud-sound" id="soundBtn" type="button" aria-pressed="false" aria-label="Sound"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="hud-sound-label">Sound off</span></button>
+    <button class="hud-map" id="mapBtn" type="button" aria-expanded="false" aria-controls="worldMap">Worlds</button>
+    </div>
+  </header>
+  <nav class="rail" id="rail" aria-label="Chapters">
+    <a href="#start" data-rail="start"><span>Start</span></a>
+    <a href="#origins" data-rail="origins"><span>Where it started</span></a>
+    <a href="#simoai" data-rail="simoai"><span>SimoAI</span></a>
+    <a href="#ironline" data-rail="ironline"><span>Ironline</span></a>
+    <a href="#mana" data-rail="mana"><span>Mana Vessel</span></a>
+    <a href="#shipped" data-rail="shipped"><span>Shipped</span></a>
+    <a href="#studio" data-rail="studio"><span>Studio</span></a>
+    <a href="#method" data-rail="method"><span>How I work</span></a>
+    <a href="#credits" data-rail="credits"><span>Credits</span></a>
+    <a href="#contact" data-rail="contact"><span>Contact</span></a>
+  </nav>
+  <div class="world-map" id="worldMap" hidden>
+    <div class="wm-inner">
+      <p class="wm-title">Pick a world</p>
+      <ol class="wm-list">
+        <li><a href="#start" style="--a:#05060f;--b:#6ee7ff"><b>Deep space</b><span>Start</span></a></li>
+        <li><a href="#origins" style="--a:#ffe4d4;--b:#8ecae6"><b>Clay</b><span>Where it started, 2020 to Houston</span></a></li>
+        <li><a href="#simoai" style="--a:#042030;--b:#28ffd2"><b>Glass lab</b><span>SimoAI, local AI on one GPU</span></a></li>
+        <li><a href="#ironline" style="--a:#060607;--b:#ff4b1f"><b>Night arena</b><span>Ironline, a 5v5 browser shooter</span></a></li>
+        <li><a href="#mana" style="--a:#2a1440;--b:#ffd36b"><b>Twilight valley</b><span>Mana Vessel, a fantasy RPG</span></a></li>
+        <li><a href="#shipped" style="--a:#cdc9c2;--b:#dd614c"><b>Concrete</b><span>Shipped: seven sites and tools</span></a></li>
+        <li><a href="#studio" style="--a:#fbf6ea;--b:#2547d0"><b>Paper and ink</b><span>Films and a machine you can drive</span></a></li>
+        <li><a href="#method" style="--a:#0d0d0f;--b:#e9e4d8"><b>Editorial</b><span>How I work with AI agents</span></a></li>
+        <li><a href="#credits" style="--a:#000;--b:#fff"><b>The credits</b><span>Who did what</span></a></li>
+        <li><a href="#contact" style="--a:#05060f;--b:#6ee7ff"><b>Back to space</b><span>Contact</span></a></li>
+      </ol>
+      <button class="wm-close" type="button" data-close-map>Close</button>
+    </div>
+  </div>
+
+  <main id="main">
+    <!-- ============================================================ START: deep space -->
+    <section class="w w-cosmic start" id="start" data-world="cosmic" data-robot="0.5,-0.86,0.62,-0.35" data-robot-m="0.5,0.06,0.2,-0.3" aria-labelledby="start-h">
+      <h1 class="giant under" id="start-h" aria-label="Simo"><span class="giant-in">SIMO</span></h1>
+      <div class="start-copy">
+        <p class="start-line">I’m 16 and I build <span class="pill"><img src="images/t/ironline-terminal.webp" width="704" height="440" alt="" loading="lazy" decoding="async"></span>&nbsp;games, <span class="pill"><img src="images/t/workspace-dashboard.webp" width="848" height="440" alt="" loading="lazy" decoding="async"></span>&nbsp;apps and <span class="pill"><img src="images/t/simoai-kitten.webp" width="440" height="440" alt="" loading="lazy" decoding="async"></span>&nbsp;AI&nbsp;tools in Casablanca.</p>
+        <p class="start-sub">This portfolio is a trip through seven worlds. Each one is built in its own style, and the robot is my guide, rebuilt from my own game.</p>
+        <p class="start-act">
+          <a class="btn btn-cosmic" href="#origins">Start the tour</a>
+          <a class="btn btn-ghost" href="mailto:elomaris310@gmail.com?subject=Hi%20Simo">Email me</a>
+        </p>
+      </div>
+      <p class="scroll-hint" aria-hidden="true"><span class="scroll-wheel"></span>Scroll to travel</p>
+    </section>
+
+    <!-- ============================================================ ORIGINS: clay -->
+    <section class="w w-clay origins" id="origins" data-world="clay" data-robot="-0.62,-0.62,0.4,0.6" data-robot-m="-0.62,-0.95,0.26,0.6" aria-labelledby="origins-h">
+      <div class="clay-pin" id="clayPin">
+        <div class="clay-head">
+          <h2 id="origins-h" class="clay-title">Where it started</h2>
+          <p class="clay-sub">Five stops from my first program to an international final. The robot walks it with you.</p>
+        </div>
+        <div class="clay-track" id="clayTrack">
+          <article class="station" data-stop="0">
+            <button class="block" type="button" aria-label="Bump the 2020 block"><span class="block-face">S</span></button>
+            <p class="station-year">2020</p>
+            <h3>My first program</h3>
+            <p>A Mario-style platformer, made during lockdown. It barely worked. It was mine, and that was the moment software became something I make, not only use.</p>
+          </article>
+          <article class="station" data-stop="1">
+            <button class="block" type="button" aria-label="Bump the age 12 block"><span class="block-face">S</span></button>
+            <p class="station-year">Age 12</p>
+            <h3>My first robotics competition</h3>
+            <p>The World Robot Olympiad. The robots were fun, but the real hook was the loop: design it, test it, watch it fail, fix it.</p>
+          </article>
+          <article class="station" data-stop="2">
+            <button class="block" type="button" aria-label="Bump the 2023 block"><span class="block-face">S</span></button>
+            <p class="station-year">2023</p>
+            <h3>Morocco’s WRO title</h3>
+            <p>National winner on my first attempt, then the international final in Panama.</p>
+          </article>
+          <article class="station" data-stop="3">
+            <button class="block" type="button" aria-label="Bump the 2024 block"><span class="block-face">S</span></button>
+            <p class="station-year">2024</p>
+            <h3>Teaching myself the web</h3>
+            <p>No bootcamp and no classes, just documentation and stubbornness. My first real project was <a href="#work/posesandbox" data-open="posesandbox">PoseSandbox</a>, a 3D posing tool.</p>
+          </article>
+          <article class="station station-big" data-stop="4">
+            <button class="block" type="button" aria-label="Bump the 2026 block"><span class="block-face">S</span></button>
+            <p class="station-year">2026</p>
+            <h3>First in Morocco, then Houston</h3>
+            <p>I led team LOGIKO, first-timers except for me, to first place in Morocco’s FIRST LEGO League and a place at the championship in Houston. Our project was <a href="#work/archaeosmart" data-open="archaeosmart">ArchaeoSmart</a>.</p>
+          </article>
+          <article class="station station-next" data-stop="5">
+            <p class="station-year">Sep 2026</p>
+            <h3>Then the agents joined</h3>
+            <p>I started running AI models on my own PC and building with AI coding agents. Keep scrolling: the next world is made of glass.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ SIMOAI: glass lab -->
+    <section class="w w-glass simoai" id="simoai" data-world="glass" data-robot="0.66,-0.55,0.42,-0.5" data-robot-m="0.64,-0.96,0.24,-0.4" aria-labelledby="simoai-h">
+      <div class="glass-head">
+        <h2 id="simoai-h" class="glass-title">SimoAI</h2>
+        <p class="glass-lead">A private AI assistant that runs on my own PC. One model plans each request, specialists do the work, and the screen only shows what actually ran.</p>
+        <ul class="glass-stats" aria-label="SimoAI in numbers">
+          <li><b>6</b><span>local models</span></li>
+          <li><b>16 GB</b><span>graphics card</span></li>
+          <li><b>52/65</b><span>hidden tests passed by its coder</span></li>
+          <li><b>3</b><span>weeks from zero AI knowledge</span></li>
+        </ul>
+      </div>
+
+      <div class="router glass-panel" id="router">
+        <div class="router-top">
+          <h3>Watch it plan</h3>
+          <p>Pick a request. Qwen3 14B splits it into tasks and sends each one to a specialist.</p>
+        </div>
+        <div class="router-chips" role="group" aria-label="Example requests">
+          <button type="button" class="chip" data-req="circle" aria-pressed="false">Explain a circle’s area, draw it, animate it</button>
+          <button type="button" class="chip" data-req="pdf" aria-pressed="false">Read page 3 of a scanned PDF</button>
+          <button type="button" class="chip" data-req="code" aria-pressed="false">Write a debounce function</button>
+          <button type="button" class="chip" data-req="video" aria-pressed="false">Turn this kitten into a video</button>
+        </div>
+        <div class="router-stage" aria-live="polite">
+          <p class="router-input" id="routerInput"><span class="router-caret"></span>Pick a request above</p>
+          <p class="router-plan" id="routerPlan"></p>
+          <ol class="router-lanes" id="routerLanes"></ol>
+          <p class="router-note" id="routerNote"></p>
+        </div>
+      </div>
+
+      <div class="glass-grid">
+        <figure class="glass-panel g-shot g-wide">
+          <button class="sf" type="button" data-full="images/simoai-auto.webp" data-alt="SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram" aria-label="View larger: SimoAI in Auto mode"><img src="images/t/simoai-auto.webp" width="704" height="440" alt="SimoAI in Auto mode answering the circle request with text and a diagram" loading="lazy" decoding="async"></button>
+          <figcaption>Auto mode, after the fix: the text first, then the exact diagram.</figcaption>
+        </figure>
+        <figure class="glass-panel g-shot g-video">
+          <video class="m loop-v" src="images/simoai-kitten-wan.mp4" poster="images/t/simoai-kitten-wan.webp" muted loop playsinline preload="none" width="480" height="480" aria-label="A kitten image animated into a short clip by Wan 2.2 on Simo’s PC"></video>
+          <figcaption>Made on my GPU: Qwen-Image drew the kitten, Wan 2.2 moved it. No cloud.</figcaption>
+        </figure>
+        <figure class="glass-panel g-shot g-phone">
+          <button class="sf" type="button" data-full="images/simoai-mobile.webp" data-alt="SimoAI on a phone-sized screen: the circle answer and its diagram" aria-label="View larger: SimoAI on a phone"><img src="images/t/simoai-mobile.webp" width="204" height="440" alt="SimoAI on a phone-sized screen" loading="lazy" decoding="async"></button>
+          <figcaption>Works on a phone too.</figcaption>
+        </figure>
+      </div>
+
+      <div class="bugs" id="bugs">
+        <h3 class="bugs-title">Three bugs that shaped it</h3>
+        <article class="bug glass-panel">
+          <h4>The circle request</h4>
+          <p>I asked for an explanation, a drawn circle and an animation. I got an office scene and lost the written answer. Now requests split into explicit tasks, the text comes first, and exact shapes go to a renderer. Same request after the fix: 48 seconds, all three outputs.</p>
+        </article>
+        <article class="bug glass-panel">
+          <h4>The 40-minute video</h4>
+          <p>One “quality” run spent about 33 minutes inside Wan, rendering 121 frames at 1280×1216. A pixel budget and two-second defaults brought a controlled test from about 3 min 20 s to 2 min 22 s.</p>
+        </article>
+        <article class="bug glass-panel">
+          <h4>The save that “passed”</h4>
+          <p>An image failed to save with a Windows permission error. The first fix passed a mocked test and failed a real one. The folders moved inside the project, and a real generation proved it: 19 of 19 tests.</p>
+        </article>
+      </div>
+
+      <figure class="glass-panel gpu" id="how-gpu">
+        <div class="gpu-copy">
+          <h3>16 GB, one job at a time</h3>
+          <p>A 30B coder, an image model and a video model can’t share one graphics card, so jobs queue and models move on and off it. This machine is that queue. Pick a crate.</p>
+        </div>
+        <iframe class="figure-embed" data-figure src="explainers/gpu-queue.html" title="Interactive: SimoAI’s GPU queue as a crane dock. Click a crate, or press 1 to 5, to queue a job." loading="lazy"></iframe>
+      </figure>
+
+      <p class="w-foot"><span>Code by Codex, an AI coding agent. Product, testing and the routing idea: me.</span><button class="btn btn-glass" type="button" data-open="simoai">Open the SimoAI dossier</button></p>
+    </section>
+
+    <!-- ============================================================ IRONLINE: night arena -->
+    <section class="w w-arena ironline" id="ironline" data-world="arena" data-robot="-0.7,-0.75,0.44,0.55" data-robot-m="0.74,-2.4,0.12,-0.3" aria-labelledby="ironline-h">
+      <div class="arena-pin" id="arenaPin">
+        <div class="letterbox top" aria-hidden="true"></div>
+        <div class="letterbox bottom" aria-hidden="true"></div>
+        <h2 class="arena-title" id="ironline-h"><span>IRON</span><span>LINE</span></h2>
+        <p class="arena-tag">A 5v5 tactical shooter that runs in a browser tab. Three maps, five agents, nine weapons, bots that trade, lurk and save.</p>
+        <div class="screen" id="arenaScreen" aria-label="Ironline screens. Click to fire.">
+          <figure class="shot is-on" data-sub="Terminal at sunset. Teammates hold the A site."><img src="images/ironline-terminal.webp" width="1440" height="900" alt="Ironline on Terminal at sunset: teammates at the A site, the minimap and the ability bar" decoding="async"></figure>
+          <figure class="shot" data-sub="Skybridge at night, from the attackers’ spawn."><img src="images/ironline-skybridge.webp" width="1440" height="900" alt="Ironline on Skybridge at night, with containers and the attackers’ spawn markings" loading="lazy" decoding="async"></figure>
+          <figure class="shot" data-sub="The buy phase: sidearms, rifles, shields and four abilities per agent."><img src="images/ironline-buy.webp" width="1440" height="900" alt="The buy menu: sidearms, rifles, shields and Warden’s four abilities with their prices" loading="lazy" decoding="async"></figure>
+          <figure class="shot" data-sub="The practice range, with target bots and live accuracy."><img src="images/ironline-range.webp" width="1440" height="900" alt="The practice range on Terminal, with target bots and a live accuracy panel" loading="lazy" decoding="async"></figure>
+          <div class="crosshair" id="crosshair" aria-hidden="true"></div>
+          <div class="hits" aria-live="polite"><span class="hits-score"><b id="score">0</b> pts</span><span id="combo" class="combo"></span><span class="hits-acc"><span id="hitTargets">0</span>/<span id="hitCount">0</span> hits</span></div>
+          <p class="range-hint" aria-hidden="true">Bots pop up. Shoot them.</p>
+        </div>
+        <p class="subtitle" id="arenaSub" aria-live="polite">Terminal at sunset. Teammates hold the A site.</p>
+        <ul class="hud-stats" aria-label="Ironline in numbers">
+          <li><b>128 Hz</b><span>deterministic simulation</span></li>
+          <li><b>290</b><span>tests passing</span></li>
+          <li><b>3 · 5 · 9</b><span>maps, agents, weapons</span></li>
+          <li><b>LAN</b><span>multiplayer</span></li>
+        </ul>
+      </div>
+      <div class="arena-more">
+        <div class="arena-text">
+          <h3>Rules that know nothing about graphics</h3>
+          <p>The game runs in a pure simulation at 128 ticks a second. Bots and the network write to it; the renderer, the HUD and the sound only read it. That is why every rule, weapon and bot can be tested without playing.</p>
+          <p>It started as <b>Vector Strike</b>, my first attempt: one map, four weapons, rules tangled into the rendering. Everything it got wrong became Ironline’s plan.</p>
+        </div>
+        <figure class="arena-proto">
+          <button class="sf" type="button" data-full="images/vector-loadout.webp" data-alt="Vector Strike’s loadout menu over the coastal research facility map" aria-label="View larger: Vector Strike"><img src="images/t/vector-loadout.webp" width="704" height="440" alt="Vector Strike’s loadout menu" loading="lazy" decoding="async"></button>
+          <figcaption>Vector Strike, the prototype.</figcaption>
+        </figure>
+      </div>
+      <p class="w-foot"><span>Code by Claude Code. Design, scope and sign-off: me.</span><button class="btn btn-arena" type="button" data-open="ironline">Open the Ironline dossier</button></p>
+    </section>
+
+    <!-- ============================================================ MANA VESSEL: twilight valley -->
+    <section class="w w-fantasy mana" id="mana" data-world="fantasy" data-robot="0.64,-0.7,0.42,-0.55" data-robot-m="0.64,-0.96,0.24,-0.4" aria-labelledby="mana-h">
+      <div class="fantasy-head">
+        <h2 id="mana-h" class="fantasy-title">Mana Vessel</h2>
+        <p class="fantasy-lead">An open-world action RPG that ships as one HTML file. Three chapters so far: Buena Village, the city of Roa and the Demon Continent, with spells, bosses, companions and a sky that runs from dawn to night. A fan game inspired by Mushoku Tensei.</p>
+        <ul class="tome" aria-label="Mana Vessel in numbers"><li><b>3</b><span>chapters</span></li><li><b>9</b><span>heroes</span></li><li><b>141</b><span>commits</span></li><li><b>1</b><span>HTML file</span></li></ul>
+      </div>
+      <div class="runes" role="group" aria-label="Cast a spell">
+        <p class="runes-hint">The game has five schools of magic. Cast one.</p>
+        <div class="rune-ring">
+          <button class="rune" type="button" data-spell="fire" style="--rc:#ff6a2b"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 29c-6 0-9-4.5-9-9 0-5 4-7.5 5-12 2.5 2 3 4.5 3 6.5 1.5-1.5 2-3.5 2-5.5 4 3 7 7.5 7 11 0 4.5-3 9-8 9z"/><path d="M16 29c-2.5 0-4-2-4-4.2 0-2.4 2-3.6 3-6 1.5 1.5 5 3.4 5 6 0 2.4-1.6 4.2-4 4.2z"/></svg><span class="rune-name">Fire</span></button>
+          <button class="rune" type="button" data-spell="water" style="--rc:#3fa9ff"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c4 6 9 11 9 16a9 9 0 0 1-18 0c0-5 5-10 9-16z"/><path d="M11.5 21a4.5 4.5 0 0 0 4.5 4.5"/></svg><span class="rune-name">Water</span></button>
+          <button class="rune" type="button" data-spell="wind" style="--rc:#c8fff2"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a4 4 0 1 0-4-4"/><path d="M4 17h21a4 4 0 1 1-4 4"/><path d="M4 23h9"/></svg><span class="rune-name">Wind</span></button>
+          <button class="rune" type="button" data-spell="stone" style="--rc:#d1a86c"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22l4-11 7-4 8 3 3 10-6 6H10z"/><path d="M9 11l5 6 10-7M14 17l-4 10M14 17l9 3"/></svg><span class="rune-name">Stone</span></button>
+          <button class="rune" type="button" data-spell="healing" style="--rc:#7dff9a"><svg viewBox="0 0 32 32" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M26 5C13 5 6 12 6 21c0 3 1 5 2 6 1-8 6-14 13-17-6 4-10 10-11 17 9 0 16-6 16-22z"/></svg><span class="rune-name">Healing</span></button>
+        </div>
+      </div>
+      <div class="scrolls" data-group="mana">
+        <figure class="scroll-frame f1"><button class="sf" type="button" data-full="images/mana-heroes.webp" data-alt="The hero cast lined up in Roa: Rudeus, Eris, Ghislaine, Roxy and more" aria-label="View larger: The cast, rebuilt as full-size heroes"><img src="images/t/mana-heroes.webp" width="782" height="440" alt="The hero cast lined up in Roa: Rudeus, Eris, Ghislaine, Roxy and more" loading="lazy" decoding="async"></button><figcaption>The cast, rebuilt as full-size heroes</figcaption></figure>
+        <figure class="scroll-frame f2"><button class="sf" type="button" data-full="images/mana-demon-waste.webp" data-alt="Dusk on the Demon Continent: red mesas and dry grass under a rust sky" aria-label="View larger: Chapter III: waking on the Demon Continent"><img src="images/t/mana-demon-waste.webp" width="782" height="440" alt="Dusk on the Demon Continent: red mesas and dry grass under a rust sky" loading="lazy" decoding="async"></button><figcaption>Chapter III: waking on the Demon Continent</figcaption></figure>
+        <figure class="scroll-frame f3"><button class="sf" type="button" data-full="images/mana-migurd.webp" data-alt="The Migurd village: round huts behind a wooden fence at dusk" aria-label="View larger: The Migurd village"><img src="images/t/mana-migurd.webp" width="782" height="440" alt="The Migurd village: round huts behind a wooden fence at dusk" loading="lazy" decoding="async"></button><figcaption>The Migurd village</figcaption></figure>
+        <figure class="scroll-frame f4"><button class="sf" type="button" data-full="images/mana-fireball.webp" data-alt="A fireball bursting between two wolves near the forge" aria-label="View larger: Fire magic, rebuilt with new spell effects"><img src="images/t/mana-fireball.webp" width="782" height="440" alt="A fireball bursting between two wolves near the forge" loading="lazy" decoding="async"></button><figcaption>Fire magic, rebuilt with new spell effects</figcaption></figure>
+        <figure class="scroll-frame f5"><button class="sf" type="button" data-full="images/mana-storm.webp" data-alt="A lightning strike on the storm plateau, rain falling in grey light" aria-label="View larger: The storm plateau"><img src="images/t/mana-storm.webp" width="782" height="440" alt="A lightning strike on the storm plateau, rain falling in grey light" loading="lazy" decoding="async"></button><figcaption>The storm plateau</figcaption></figure>
+        <figure class="scroll-frame f6"><button class="sf" type="button" data-full="images/mana-sunset.webp" data-alt="The hero with a staff at sunset, beside a forge and a watermill" aria-label="View larger: Chapter I: Buena Village at sunset"><img src="images/t/mana-sunset.webp" width="704" height="440" alt="The hero with a staff at sunset, beside a forge and a watermill" loading="lazy" decoding="async"></button><figcaption>Chapter I: Buena Village at sunset</figcaption></figure>
+      </div>
+      <p class="w-foot"><span>Chapter I by Codex; Chapters II and III, the heroes and the spell effects by Claude Code, directed by me. Two of the character models are my own. A personal fan project, not commercial.</span><button class="btn btn-fantasy" type="button" data-open="mana">Open the Mana Vessel dossier</button></p>
+    </section>
+
+    <!-- ============================================================ SHIPPED: concrete -->
+    <section class="w w-concrete shipped" id="shipped" data-world="concrete" data-robot="0.8,-0.92,0.26,-0.6" data-robot-m="0.7,-0.98,0.2,-0.5" aria-labelledby="shipped-h">
+      <h2 class="brutal-title" id="shipped-h">SHIPPED<span>.</span></h2>
+      <p class="brutal-lead">Real sites and tools, live on the internet. Some for real businesses, with real customers and real money.</p>
+      <div class="marquee" aria-hidden="true"><div class="marquee-track">
+        <span>LIVE ON THE INTERNET</span><span>BUILT IN A DAY</span><span>TWO COLOURWAYS SOLD OUT</span><span>1ST IN MOROCCO</span><span>WORKS OFFLINE</span><span>NO ACCOUNT NEEDED</span><span>ROW-LEVEL SECURITY</span>
+        <span>LIVE ON THE INTERNET</span><span>BUILT IN A DAY</span><span>TWO COLOURWAYS SOLD OUT</span><span>1ST IN MOROCCO</span><span>WORKS OFFLINE</span><span>NO ACCOUNT NEEDED</span><span>ROW-LEVEL SECURITY</span>
+      </div></div>
+      <div class="slices" id="slices">
+        
+        <article class="slice is-open" style="--sc:#dd614c">
+          <button class="slice-tab" type="button" aria-expanded="true" aria-controls="slice-archaeosmart"><span class="slice-name">ArchaeoSmart</span><span class="slice-tag">FLL winner</span></button>
+          <div class="slice-body" id="slice-archaeosmart">
+            <div class="slice-img is-phone"><img src="images/archaeo-home.webp" width="780" height="1688" alt="ArchaeoSmart home screen on a phone: counters and six tool buttons" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>ArchaeoSmart</h3>
+              <p class="slice-desc">Offline field app, 2025–26</p>
+              <p>Our FLL innovation project: archaeologists record finds by voice, with GPS, QR labels and sketches, and it all works with no signal. Our team won first place in Morocco.</p>
+              <p class="slice-acts"><a class="b-btn" href="https://semo-el.github.io/ArchaeoSmart_V2/" target="_blank" rel="noopener">Open the app<span class="vh"> (opens in a new tab)</span></a><button class="b-btn b-btn-alt" type="button" data-open="archaeosmart">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="slice" style="--sc:#111111">
+          <button class="slice-tab" type="button" aria-expanded="false" aria-controls="slice-svvvd"><span class="slice-name">SVVVD Y2K</span><span class="slice-tag">Sold out</span></button>
+          <div class="slice-body" id="slice-svvvd">
+            <div class="slice-img"><img src="images/svvvd-home.webp" width="1600" height="826" alt="SVVVD Y2K homepage: chrome pill logo and “Wear it your way”" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>SVVVD Y2K</h3>
+              <p class="slice-desc">Streetwear store, 2026</p>
+              <p>The store and the identity for my cousin’s Y2K streetwear brand: 35 pieces in three colourways. Two of the three are sold out.</p>
+              <p class="slice-acts"><a class="b-btn" href="https://semo-el.github.io/SVVVD-Y2K/" target="_blank" rel="noopener">Open the store<span class="vh"> (opens in a new tab)</span></a><button class="b-btn b-btn-alt" type="button" data-open="svvvd">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="slice is-light" style="--sc:#daa144">
+          <button class="slice-tab" type="button" aria-expanded="false" aria-controls="slice-workspace"><span class="slice-name">Workspace OS</span><span class="slice-tag">Backend</span></button>
+          <div class="slice-body" id="slice-workspace">
+            <div class="slice-img"><img src="images/workspace-dashboard.webp" width="1600" height="830" alt="Workspace OS dashboard: workspaces with roles, invite codes, projects and tasks" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>Workspace OS</h3>
+              <p class="slice-desc">Multi-tenant backend, 2026</p>
+              <p>Built to learn backends: accounts, workspaces, roles, invite codes and tasks, with the database itself refusing anything you’re not allowed to see.</p>
+              <p class="slice-acts"><a class="b-btn" href="https://semo-el.github.io/Workspace_OS/" target="_blank" rel="noopener">Open the app<span class="vh"> (opens in a new tab)</span></a><button class="b-btn b-btn-alt" type="button" data-open="workspace">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="slice" style="--sc:#2b2b2b">
+          <button class="slice-tab" type="button" aria-expanded="false" aria-controls="slice-posesandbox"><span class="slice-name">PoseSandbox</span><span class="slice-tag">First site</span></button>
+          <div class="slice-body" id="slice-posesandbox">
+            <div class="slice-img"><img src="images/posesandbox-editor.webp" width="1600" height="828" alt="PoseSandbox editor: a posable figure on a grid, with selection, gizmo and reference panels" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>PoseSandbox</h3>
+              <p class="slice-desc">3D posing tool, 2024–25</p>
+              <p>My first website: pose a 3D figure in the browser, pin a reference image, add props and export a PNG. No account, no install.</p>
+              <p class="slice-acts"><a class="b-btn" href="https://semo-el.github.io/PoseSandbox/" target="_blank" rel="noopener">Open PoseSandbox<span class="vh"> (opens in a new tab)</span></a><button class="b-btn b-btn-alt" type="button" data-open="posesandbox">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="slice is-light" style="--sc:#f2efe9">
+          <button class="slice-tab" type="button" aria-expanded="false" aria-controls="slice-evenly"><span class="slice-name">Evenly</span><span class="slice-tag">Tool</span></button>
+          <div class="slice-body" id="slice-evenly">
+            <div class="slice-img"><img src="images/evenly-trip.webp" width="1440" height="900" alt="Evenly with an example Lisbon weekend: expenses, balances and a three-payment settle-up plan" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>Evenly</h3>
+              <p class="slice-desc">Expense splitter, 2026</p>
+              <p>Split a trip’s costs and settle up in as few payments as possible. Money is kept in whole cents, so nothing gets lost to rounding.</p>
+              <p class="slice-acts"><button class="b-btn b-btn-alt" type="button" data-open="evenly">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="slice" style="--sc:#8c2f1e">
+          <button class="slice-tab" type="button" aria-expanded="false" aria-controls="slice-nakama"><span class="slice-name">Nakama Store</span><span class="slice-tag">Client</span></button>
+          <div class="slice-body" id="slice-nakama">
+            <div class="slice-img"><img src="images/nakama-home.webp" width="1440" height="900" alt="Nakama Store hero: the Black Dragon and White Dragon katanas side by side" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>Nakama Store</h3>
+              <p class="slice-desc">Katana shop site, 2026</p>
+              <p>A product site for a katana shop in Marrakech. A split “Black Dragon vs White Dragon” hero, then details, pricing and ordering through WhatsApp or Instagram.</p>
+              <p class="slice-acts"><a class="b-btn" href="https://semo-el.github.io/Nakama_V2/" target="_blank" rel="noopener">Open the site<span class="vh"> (opens in a new tab)</span></a><button class="b-btn b-btn-alt" type="button" data-open="nakama">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+        <article class="slice is-light" style="--sc:#e9b8a6">
+          <button class="slice-tab" type="button" aria-expanded="false" aria-controls="slice-sunset"><span class="slice-name">Sunset Event</span><span class="slice-tag">Client</span></button>
+          <div class="slice-body" id="slice-sunset">
+            <div class="slice-img"><img src="images/sunset-home.webp" width="1440" height="900" alt="Sunset Event homepage: “Des moments dehors, préparés avec douceur”" loading="lazy" decoding="async"></div>
+            <div class="slice-text">
+              <h3>Sunset Event</h3>
+              <p class="slice-desc">Event booking site, 2026</p>
+              <p>A French-language site for an outdoor event service near Casablanca: beach dinners, picnics and celebrations, with packages and WhatsApp booking.</p>
+              <p class="slice-acts"><a class="b-btn" href="https://semo-el.github.io/Sunset/" target="_blank" rel="noopener">Open the site<span class="vh"> (opens in a new tab)</span></a><button class="b-btn b-btn-alt" type="button" data-open="sunset">Dossier</button></p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================ STUDIO: paper and ink -->
+    <section class="w w-studio studio" id="studio" data-world="studio" data-robot="-0.72,-0.8,0.34,0.5" data-robot-m="-0.66,-0.97,0.22,0.5" aria-labelledby="studio-h">
+      <div class="ink-layer" id="inkLayer" aria-hidden="true"></div>
+      <h2 class="studio-title" id="studio-h">Motion <em>&amp;</em> machines</h2>
+      <p class="studio-lead">Click anywhere on the paper to splash some ink.</p>
+      <div class="sia">
+        <div class="sia-film">
+          <div class="splat-mask"><video class="m loop-v" src="images/sia-teaser.mp4" poster="images/t/sia-first-place.webp" muted loop playsinline preload="none" width="1280" height="720" aria-label="Eleven silent seconds from the SIA film: a football pitch turns into a 1st place trophy card"></video></div>
+          <span class="pow pow-a" aria-hidden="true">No video editor!</span>
+        </div>
+        <div class="sia-text">
+          <h3>SIA: Students in Action</h3>
+          <p>Two films for the senior student board at GS Universalis in Casablanca: 98 seconds on their year, and a 32-second team reveal. Every frame is drawn by code on a canvas and encoded with ffmpeg. The music is generated in code too.</p>
+          <p class="small">Stills show title cards only, no faces or students’ names. Code by Claude Code; I picked the story and the sources.</p>
+          <button class="btn btn-studio" type="button" data-open="sia">Open the SIA dossier</button>
+        </div>
+        <div class="prints" data-group="sia">
+          <button class="sf print p1" type="button" data-full="images/sia-act.webp" data-alt="Title card: We act" aria-label="View larger: We act"><img src="images/t/sia-act.webp" width="782" height="440" alt="Title card: We act" loading="lazy" decoding="async"></button>
+          <button class="sf print p2" type="button" data-full="images/sia-kindness.webp" data-alt="Our ultimate goal is to spread love and kindness" aria-label="View larger: love and kindness"><img src="images/t/sia-kindness.webp" width="782" height="440" alt="Love and kindness card" loading="lazy" decoding="async"></button>
+          <button class="sf print p3" type="button" data-full="images/sia-edition.webp" data-alt="Tournament card: Edition #2, Nov 23" aria-label="View larger: Edition 2"><img src="images/t/sia-edition.webp" width="782" height="440" alt="Tournament card" loading="lazy" decoding="async"></button>
+          <button class="sf print p4" type="button" data-full="images/sia-results.webp" data-alt="100% success, with a ring chart of the baccalaureate results" aria-label="View larger: results"><img src="images/t/sia-results.webp" width="782" height="440" alt="Results card" loading="lazy" decoding="async"></button>
+        </div>
+      </div>
+      <div class="film" id="film">
+        <div class="film-text">
+          <h3>A launch film for PoseSandbox</h3>
+          <p>Twenty seconds for my first website. The mannequin, the gizmo and the whole interface were rebuilt in code from screenshots and animated frame by frame, with synthesised sound and a voice-over.</p>
+          <p class="small">Made with Claude Code; I set the story and the rules it had to follow.</p>
+          <span class="pow pow-c" aria-hidden="true">Sound on!</span>
+        </div>
+        <figure class="film-strip">
+          <div class="film-screen">
+            <video id="psFilm" src="images/posesandbox-film.mp4" poster="images/posesandbox-film-poster.webp" playsinline preload="none" width="1920" height="1080" aria-label="PoseSandbox launch film, 20 seconds, with voice-over"></video>
+            <button class="film-play" id="psPlay" type="button"><span class="film-tri" aria-hidden="true"></span>Play with sound</button>
+          </div>
+        </figure>
+      </div>
+      <div class="machine">
+        <div class="machine-text">
+          <h3>A machine you can drive</h3>
+          <p>A car’s open differential, running live. Move across it, or use the arrow keys, to steer: one wheel speeds up, the other slows by exactly as much. Every number comes from real gear ratios.</p>
+          <span class="pow pow-b" aria-hidden="true">Live!</span>
+        </div>
+        <figure class="machine-frame"><iframe class="figure-embed" data-figure src="explainers/differential.html" title="Interactive open differential: move across the figure, or use the arrow keys, to steer" loading="lazy"></iframe></figure>
+      </div>
+    </section>
+
+    <!-- ============================================================ METHOD: editorial -->
+    <section class="w w-editorial method" id="method" data-world="editorial" data-robot="0.8,-2.4,0.3,-0.4" data-robot-m="0.8,-2.4,0.2,-0.4" aria-labelledby="method-h">
+      <h2 class="vh" id="method-h">How I work</h2>
+      <p class="scrub" id="scrub">Since September, most of my code has been written by AI coding agents. I decide what gets built, I write the brief, I test every result and I send back what breaks. Every project here says who wrote what.</p>
+      <div class="evidence">
+        <article class="ev-card">
+          <h3>I decide what finished means</h3>
+          <p>Ironline’s rules live in a simulation that knows nothing about graphics, so every rule, weapon and bot is tested without playing. The agent isn’t done until they pass.</p>
+          <pre data-ui><code> Test Files  27 <span class="ok">passed</span> (27)
+      Tests  290 <span class="ok">passed</span> (290)
+   Duration  10.34s</code></pre>
+          <p class="ev-cap">Ironline’s test run, 14 October 2026.</p>
+        </article>
+        <article class="ev-card">
+          <h3>I measure instead of arguing</h3>
+          <p>A free cloud chatbot beat SimoAI on a parser task. So we built a benchmark: eight JavaScript tasks with hidden tests, one attempt each.</p>
+          <div class="meter" role="img" aria-label="Qwen3-Coder 30B passed 52 of 65 hidden test groups, 80 percent"><span style="--v:80%"></span></div>
+          <p class="ev-cap"><b>52 of 65</b> hidden test groups and 4 of 8 tasks. Good for routine code; parsers still need checking.</p>
+        </article>
+        <article class="ev-card">
+          <h3>I use it like a stranger would</h3>
+          <p>One honest test, asking SimoAI for a circle, changed its whole design. Breaking things on purpose is most of the job.</p>
+          <div class="ev-frames" data-group="circle"><button type="button" class="sf" data-full="images/simoai-auto.webp" data-alt="SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram" aria-label="View larger: SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram"><img src="images/t/simoai-auto.webp" width="704" height="440" alt="SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-mobile.webp" data-alt="SimoAI on a phone-sized screen: the circle answer followed by its diagram" aria-label="View larger: SimoAI on a phone-sized screen: the circle answer followed by its diagram"><img src="images/t/simoai-mobile.webp" width="204" height="440" alt="SimoAI on a phone-sized screen: the circle answer followed by its diagram" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-circle.webp" data-alt="Output of SimoAI’s exact renderer: a light blue circle labelled A = πr²" aria-label="View larger: Output of SimoAI’s exact renderer: a light blue circle labelled A = πr²"><img src="images/t/simoai-circle.webp" width="704" height="440" alt="Output of SimoAI’s exact renderer: a light blue circle labelled A = πr²" class="m" loading="lazy" decoding="async"></button></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================================================ CREDITS -->
+    <section class="w w-void credits" id="credits" data-world="void" data-robot="0,-2,0.3,0" data-robot-m="0,-2,0.2,0" aria-labelledby="credits-h">
+      <div class="credits-pin" id="creditsPin">
+        <div class="roll" id="roll">
+          <h2 id="credits-h" class="roll-title">Credits</h2>
+          <dl class="roll-block">
+            <dt>SimoAI</dt><dd>Product, testing, the routing idea: Simo</dd><dd>Code: Codex</dd>
+            <dt>Ironline</dt><dd>Design, scope, sign-off: Simo</dd><dd>Code: Claude Code</dd><dd>Tests: 290 passing</dd>
+            <dt>Mana Vessel, Evenly, Vector Strike</dt><dd>Direction: Simo</dd><dd>Code: Codex</dd>
+            <dt>ArchaeoSmart</dt><dd>Code: Simo, for team LOGIKO</dd><dd>1st in Morocco, FIRST LEGO League</dd>
+            <dt>PoseSandbox, Workspace OS, SVVVD Y2K, Nakama Store, Sunset Event</dt><dd>Design and code: Simo</dd>
+            <dt>SIA films, the open differential, the GPU dock</dt><dd>Subject and story: Simo</dd><dd>Frames and code: Claude Code</dd>
+            <dt>This website</dt><dd>Direction: Simo</dd><dd>Design and code: Claude Code</dd><dd>Guide robot S-01: rebuilt from Ironline’s agents</dd>
+            <dt>Casablanca photographs, 1930</dt><dd>Walter Mittelholzer, ETH-Bibliothek Zürich, public domain</dd>
+          </dl>
+          <div class="roll-brand">
+            <svg class="mark mark-xl" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" stroke-width="4"/><path d="M41.5 21.5a10 10 0 1 0-9.5 10.5a10 10 0 1 1-9.5 10.5" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>
+            <p>The mark is an S inside a ring: a door between worlds.</p>
+            <ul class="swatches" aria-label="The seven worlds’ colours">
+              <li style="--s:#6ee7ff"><span>Space</span></li><li style="--s:#ffb5c2"><span>Clay</span></li><li style="--s:#28ffd2"><span>Glass</span></li><li style="--s:#ff4b1f"><span>Arena</span></li><li style="--s:#ffd36b"><span>Valley</span></li><li style="--s:#bdb8ae"><span>Concrete</span></li><li style="--s:#2547d0"><span>Ink</span></li>
+            </ul>
+            <p class="fonts"><span style="font-family:Audiowide">Audiowide</span> <span style="font-family:Poppins;font-weight:800">Poppins</span> <span style="font-family:Outfit;font-weight:900">Outfit</span> <span style="font-family:'New Rocker'">New Rocker</span> <span style="font-family:'Darker Grotesque';font-weight:900">Darker Grotesque</span> <span style="font-family:Limelight">Limelight</span> <span style="font-family:Bangers">Bangers</span></p>
+          </div>
+          <p class="roll-end">Thanks for playing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ CONTACT: back to space -->
+    <section class="w w-cosmic contact" id="contact" data-world="cosmic" data-robot="-0.66,-0.86,0.52,0.45" data-robot-m="0.62,-0.98,0.24,-0.3" aria-labelledby="contact-h">
+      <div class="portal" aria-hidden="true"><img src="images/t/casablanca-1930-medina.webp" width="604" height="440" alt="" loading="lazy" decoding="async"></div>
+      <div class="contact-copy">
+        <h2 class="contact-title" id="contact-h">Your move.</h2>
+        <p class="contact-lead">Competitions, internships, a website for your business, or a question about anything you just travelled through.</p>
+        <p class="contact-act"><a class="btn btn-cosmic btn-xl" href="mailto:elomaris310@gmail.com?subject=Hi%20Simo">elomaris310@gmail.com</a></p>
+        <p class="contact-links"><a href="https://www.instagram.com/e.l.o.m.a.r.i__/" target="_blank" rel="noopener">Instagram<span class="vh"> (opens in a new tab)</span></a><a href="https://github.com/SEMO-EL" target="_blank" rel="noopener">GitHub<span class="vh"> (opens in a new tab)</span></a><a href="#start">Travel again</a></p>
+        <p class="contact-home">Home base: Casablanca, seen from the air in 1930.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Simo, Casablanca, 2026. Seven worlds, one robot.</p>
+  </footer>
+
+
+  <dialog class="sheetd" id="p-simoai" data-k="ai" aria-labelledby="p-simoai-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">SimoAI</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-simoai-h">SimoAI</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">I wanted my own AI assistant before the end of the year, and I started with no AI knowledge at all. Three weeks later it was a local app where one model plans, specialist models do the work, and the interface only reports what actually ran.</p>
+          <p class="sd-links"><span class="local">Runs on my PC, not online</span></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>25 Sep – 12 Oct 2026</dd></div><div><dt>My part</dt><dd>Product owner and tester. The routing idea, every feature choice, every bug report.</dd></div><div><dt>Code</dt><dd>Written by Codex, an AI coding agent</dd></div><div><dt>Hardware</dt><dd>Intel i5-14500, 32 GB RAM, RTX 5060 Ti with 16 GB</dd></div><div><dt>Stack</dt><dd>Node.js, Ollama, ComfyUI, IndexedDB</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="simoai" role="group" aria-label="SimoAI: 10 screens"><button type="button" class="sf" data-full="images/simoai-auto.webp" data-alt="SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram" aria-label="View larger: SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram"><img src="images/t/simoai-auto.webp" width="704" height="440" alt="SimoAI in Auto mode: one request returns a written explanation of a circle’s area, then a rendered diagram" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-video="images/simoai-kitten-wan.mp4" data-full="images/t/simoai-kitten-wan.webp" data-alt="A kitten image turned into a short looping clip by Wan 2.2, generated on my PC" aria-label="View larger: A kitten image turned into a short looping clip by Wan 2.2, generated on my PC"><video class="m" src="images/simoai-kitten-wan.mp4" poster="images/t/simoai-kitten-wan.webp" width="480" height="480" muted loop playsinline preload="none" aria-label="A kitten image turned into a short looping clip by Wan 2.2, generated on my PC"></video></button><button type="button" class="sf" data-full="images/simoai-coding.webp" data-alt="SimoAI in code mode with Qwen3-Coder selected, answering with a code block" aria-label="View larger: SimoAI in code mode with Qwen3-Coder selected, answering with a code block"><img src="images/t/simoai-coding.webp" width="704" height="440" alt="SimoAI in code mode with Qwen3-Coder selected, answering with a code block" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-video.webp" data-alt="SimoAI’s video mode for Wan 2.2: “Bring a scene to life”, with frame, size and length settings" aria-label="View larger: SimoAI’s video mode for Wan 2.2: “Bring a scene to life”, with frame, size and length settings"><img src="images/t/simoai-video.webp" width="704" height="440" alt="SimoAI’s video mode for Wan 2.2: “Bring a scene to life”, with frame, size and length settings" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/simoai-mobile.webp" data-alt="SimoAI on a phone-sized screen: the circle answer followed by its diagram" aria-label="View larger: SimoAI on a phone-sized screen: the circle answer followed by its diagram"><img src="images/t/simoai-mobile.webp" width="204" height="440" alt="SimoAI on a phone-sized screen: the circle answer followed by its diagram" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/simoai-mobile-menu.webp" data-alt="SimoAI’s sidebar on a phone: conversations, model choice and assistant settings" aria-label="View larger: SimoAI’s sidebar on a phone: conversations, model choice and assistant settings"><img src="images/t/simoai-mobile-menu.webp" width="204" height="440" alt="SimoAI’s sidebar on a phone: conversations, model choice and assistant settings" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-kitten.webp" data-alt="A grey tabby kitten looking up, generated on my PC by Qwen-Image 2.1 through SimoAI" aria-label="View larger: A grey tabby kitten looking up, generated on my PC by Qwen-Image 2.1 through SimoAI"><img src="images/t/simoai-kitten.webp" width="440" height="440" alt="A grey tabby kitten looking up, generated on my PC by Qwen-Image 2.1 through SimoAI" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-circle.webp" data-alt="Output of SimoAI’s exact renderer: a light blue circle labelled A = πr²" aria-label="View larger: Output of SimoAI’s exact renderer: a light blue circle labelled A = πr²"><img src="images/t/simoai-circle.webp" width="704" height="440" alt="Output of SimoAI’s exact renderer: a light blue circle labelled A = πr²" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-gpu-queue.webp" data-alt="SimoAI’s GPU queue drawn as a crane dock, with a model crate loaded on the card" aria-label="View larger: SimoAI’s GPU queue drawn as a crane dock, with a model crate loaded on the card"><img src="images/t/simoai-gpu-queue.webp" width="596" height="440" alt="SimoAI’s GPU queue drawn as a crane dock, with a model crate loaded on the card" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/simoai-home.webp" data-alt="SimoAI start screen: conversation list, assistant settings and starter prompts" aria-label="View larger: SimoAI start screen: conversation list, assistant settings and starter prompts"><img src="images/t/simoai-home.webp" width="704" height="440" alt="SimoAI start screen: conversation list, assistant settings and starter prompts" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>How it started</h3><div class="sd-text"><p>I had two ideas: a personal chatbot, and a site called BuildAI that would teach beginners to make one. I built the chatbot first, so that any course later would come from a real beginner’s journey. I also dropped “train my own ChatGPT” early. The realistic goal was an app on top of existing open models.</p><p>We split the work on day one. I chose the features, tested them, reported what failed and learned at my own pace; the agent wrote the code and explained it. Nearly every feature below exists because I tried something and it broke.</p></div></section>
+      <section class="sd-row"><h3>What it does</h3><div class="sd-text"><ul class="sd-list"><li><b>Chat</b> with Qwen3 14B through Ollama, entirely on the PC.</li><li><b>Auto mode:</b> Qwen3 14B plans up to six tasks across chat, code, vision, images, video, diagrams and motion graphics, and hands each one to a specialist.</li><li><b>Code</b> with Qwen3-Coder 30B, split between the graphics card and system RAM.</li><li><b>Vision</b> with Gemma 3 12B for attached images.</li><li><b>PDFs:</b> selectable text up to 50 pages or 50,000 characters, and the first five pages rendered for the vision model when a PDF is scanned.</li><li><b>Images</b> with Qwen-Image 2.1 and FLUX.1 Schnell, and <b>video</b> with Wan 2.2 (from text or from an image), all through ComfyUI.</li><li><b>History</b> in IndexedDB. Each conversation keeps its own model and settings and can be searched, renamed or exported as Markdown.</li><li><b>One-click start</b> from a desktop shortcut, and a Quit button that only stops the processes SimoAI itself started.</li></ul></div></section>
+      <section class="sd-row"><h3>How a request runs</h3><div class="sd-text"><ol class="sd-steps" aria-label="Path of a request"><li>Browser</li><li>Node.js server</li><li>Qwen3 14B plans the tasks</li><li>Orchestrator and GPU queue</li><li>Ollama, ComfyUI or the exact renderer</li><li>Each result streams back</li></ol><p>The GPU queue matters most. A 16 GB card can’t hold a 30B coder, an image model and a video model at once, so jobs run one at a time and idle image models are released before text work. Each result appears the moment it’s ready, so a slow video never holds up the written answer. <a href="#how-gpu" data-goto="how-gpu">Play with the queue as a machine</a> in “How I work”.</p></div></section>
+      <section class="sd-row"><h3>Made on my GPU</h3><div class="sd-text"><p>The kitten was generated by Qwen-Image 2.1 through SimoAI, then animated by Wan 2.2. Nothing was sent to a cloud service. The video model is still the weakest part: a finished MP4 proves the pipeline ran, not that the motion looks good.</p></div></section>
+      <section class="sd-row"><h3>Three bugs that shaped it</h3><div class="sd-text"><dl class="sd-terms"><div><dt>The circle request</dt><dd>I asked Auto mode to explain the area of a circle, draw a blue circle with the formula and animate a dot growing into a circle. I got an unrelated office scene and lost the written answer. <b>Fix:</b> requests are split into explicit tasks, the text answer comes first, and exact geometry goes to a precise renderer instead of an image model. The same request then finished in 48 seconds with all three outputs.</dd></div><div><dt>The 40-minute video</dt><dd>One “quality” run spent about 33 minutes inside Wan rendering 121 frames at 1280×1216. <b>Fix:</b> a budget of 25.6 million pixel-frames, roughly two-second defaults and GPU text encoding with offload. A controlled 49-frame test dropped from about 3 min 20 s to 2 min 22 s.</dd></div><div><dt>The save that “passed”</dt><dd>A generated image failed to save with a Windows permission error. The first fix passed a mocked test and then failed a real one. <b>Fix:</b> ComfyUI’s input, temp and output folders moved inside the project, with read-only access kept for older images. Checked with a real generation through SimoAI’s own API; 19 of 19 tests passed.</dd></div></dl></div></section>
+      <section class="sd-row"><h3>Measured, not assumed</h3><div class="sd-text"><p>In a head-to-head on a parser task, a free cloud chatbot clearly beat SimoAI. Instead of deciding “local models are bad”, we built a small benchmark: eight JavaScript tasks with hidden test groups, one attempt each, temperature 0, fixed seed.</p><div class="meter" role="img" aria-label="Qwen3-Coder 30B passed 52 of 65 hidden test groups, 80 percent"><span style="--v:80%"></span></div><p class="meter-cap"><b>52 of 65</b> hidden test groups, <b>4 of 8</b> tasks fully passed.</p><p>It was strong on an LRU cache, interval merging, dependency sorting and safe nested lookup, and weak on command parsing, a CSV edge case, debounce and deep equality. It’s a small local test, not a leaderboard. Good for routine code; parsers still need tests.</p></div></section>
+      <section class="sd-row"><h3>Limits</h3><div class="sd-text"><ul class="sd-list"><li><b>LTX-2.5 video</b> is wired into the app, but its gated weights were never installed, so the interface says it’s unavailable instead of pretending.</li><li><b>An 80B coding model</b> didn’t fit: it needed about 38 GiB of system RAM on a PC with 31.7. I removed it and wrote down why.</li><li>I never weakened Windows security or pasted secrets anywhere to make something run, even when that was the shortcut.</li></ul></div></section>
+      <section class="sd-row"><h3>What I learned</h3><div class="sd-text"><p>A useful assistant is a system, not one giant model: an interface, model runners, file handling, status checks, safe credentials, routing, media storage and tests. A router model can coordinate all of it, but only if it keeps every deliverable the user asked for.</p><p>And evidence has to match the claim. A menu entry isn’t a download, a download isn’t a working model, and a working model isn’t a good result.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/ironline" data-open="ironline">Ironline</a>, browser tactical shooter</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-ironline" data-k="game" aria-labelledby="p-ironline-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Ironline</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-ironline-h">Ironline</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">How close can a browser get to a competitive tactical shooter? Ironline is an original 5v5 plant-and-defuse game with abilities, an economy and bots that trade, lurk and save. Every name, model and sound in it is original.</p>
+          <p class="sd-links"><span class="local">Runs locally, not deployed</span></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>Sep – Oct 2026</dd></div><div><dt>My part</dt><dd>Game design, scope, and deciding when something was good enough</dd></div><div><dt>Code</dt><dd>Written by Claude Code, an AI coding agent</dd></div><div><dt>Tests</dt><dd>290 passing in 27 files (run on 14 Oct 2026)</dd></div><div><dt>Stack</dt><dd>TypeScript, Vite, Three.js, Web Audio, WebSockets, Vitest</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="ironline" role="group" aria-label="Ironline: 7 screens"><button type="button" class="sf" data-full="images/ironline-terminal.webp" data-alt="Ironline on Terminal at sunset: teammates at the A site, the minimap and the ability bar" aria-label="View larger: Ironline on Terminal at sunset: teammates at the A site, the minimap and the ability bar"><img src="images/t/ironline-terminal.webp" width="704" height="440" alt="Ironline on Terminal at sunset: teammates at the A site, the minimap and the ability bar" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/ironline-skybridge.webp" data-alt="Ironline on Skybridge at night, with containers and the attackers’ spawn markings" aria-label="View larger: Ironline on Skybridge at night, with containers and the attackers’ spawn markings"><img src="images/t/ironline-skybridge.webp" width="704" height="440" alt="Ironline on Skybridge at night, with containers and the attackers’ spawn markings" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/ironline-buy.webp" data-alt="The buy menu: sidearms, rifles, shields and Warden’s four abilities with their prices" aria-label="View larger: The buy menu: sidearms, rifles, shields and Warden’s four abilities with their prices"><img src="images/t/ironline-buy.webp" width="704" height="440" alt="The buy menu: sidearms, rifles, shields and Warden’s four abilities with their prices" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/ironline-range.webp" data-alt="The practice range on Terminal, with target bots and a live accuracy panel" aria-label="View larger: The practice range on Terminal, with target bots and a live accuracy panel"><img src="images/t/ironline-range.webp" width="704" height="440" alt="The practice range on Terminal, with target bots and a live accuracy panel" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/ironline-match.webp" data-alt="Ironline on Foundry at the start of a round, pistol out, A site sign ahead" aria-label="View larger: Ironline on Foundry at the start of a round, pistol out, A site sign ahead"><img src="images/t/ironline-match.webp" width="704" height="440" alt="Ironline on Foundry at the start of a round, pistol out, A site sign ahead" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/ironline-menu-night.webp" data-alt="Ironline’s main menu at night on Skybridge, with an agent standing on the map" aria-label="View larger: Ironline’s main menu at night on Skybridge, with an agent standing on the map"><img src="images/t/ironline-menu-night.webp" width="704" height="440" alt="Ironline’s main menu at night on Skybridge, with an agent standing on the map" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/ironline-menu.webp" data-alt="Ironline’s main menu on Foundry with the agents standing on the map" aria-label="View larger: Ironline’s main menu on Foundry with the agents standing on the map"><img src="images/t/ironline-menu.webp" width="704" height="440" alt="Ironline’s main menu on Foundry with the agents standing on the map" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>Where it came from</h3><div class="sd-text"><p>My first attempt, <a href="#work/vector" data-open="vector">Vector Strike</a>, had one map, four weapons and bots. It was fun, and it showed exactly what was missing: the rules lived inside the rendering code, the bots were easy to read, and nothing could be tested without playing. Ironline started from those three lessons, plus one rule: inspired by the genre, but every asset and name original.</p></div></section>
+      <section class="sd-row"><h3>How it’s built</h3><div class="sd-text"><ol class="sd-steps" aria-label="How Ironline is layered"><li>Input</li><li>Simulation: 128 ticks a second, deterministic</li><li>Renderer, HUD and sound only read it</li></ol><p>The game rules know nothing about graphics. The simulation is a pure, deterministic step at 128 ticks per second; bots and the network write to it, and rendering, sound and the HUD only read it. That makes rounds reproducible, lets bots be balanced by simulating rounds with no screen at all, and keeps multiplayer simple, because the host runs the same simulation everyone sees.</p></div></section>
+      <section class="sd-row"><h3>What’s in it</h3><div class="sd-text"><ul class="sd-list"><li><b>3 maps</b> (Foundry, Terminal, Skybridge), <b>5 agents</b> with four abilities each, <b>9 weapons</b> and a blade.</li><li>A full 13-round match with side swap and overtime, a credit economy, and buy, plant and defuse phases.</li><li>Bots from Easy to Elite that trade kills, lurk and save, and a practice range with drills and live accuracy stats.</li><li>Fixed recoil patterns, movement inaccuracy, wall penetration, killcam, rebindable keys and career stats.</li><li>All audio generated in code: a sound per weapon, positional audio, muffling through walls, reverb and a menu loop.</li><li>LAN multiplayer through a WebSocket server with no dependencies.</li></ul></div></section>
+      <section class="sd-row"><h3>Limits</h3><div class="sd-text"><ul class="sd-list"><li>Multiplayer has no client prediction or lag compensation. Fine on a LAN, not ready for the internet.</li><li>The feel (mouse, recoil, sound) was tuned more by numbers than by long playtesting.</li><li>The only downloaded art is a few public-domain surface textures. Everything else is generated, and it shows up close.</li></ul></div></section>
+      <section class="sd-row"><h3>What I learned</h3><div class="sd-text"><p>Separating what is true (the simulation) from what you see (the rendering) is what makes a complicated real-time system testable. Without it, the only way to find a bug is to play until it happens.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/archaeosmart" data-open="archaeosmart">ArchaeoSmart</a>, offline field app</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-archaeosmart" data-k="web" aria-labelledby="p-archaeosmart-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">ArchaeoSmart</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-archaeosmart-h">ArchaeoSmart</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">Archaeologists in the field still write their finds on paper: fragile, unstructured, impossible to search. Our FLL innovation project was a phone app that records finds properly and keeps working with no signal.</p>
+          <p class="sd-links"><a class="btn btn-dossier" href="https://semo-el.github.io/ArchaeoSmart_V2/" target="_blank" rel="noopener">Open the app<span class="vh"> (opens in a new tab)</span></a><a class="tlink" href="https://github.com/SEMO-EL/ArchaeoSmart_V2" target="_blank" rel="noopener">Code on GitHub<span class="vh"> (opens in a new tab)</span></a></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>The 2025–26 FLL season</dd></div><div><dt>Team</dt><dd>LOGIKO. I was the oldest and the only one with competition experience; everyone else was new.</dd></div><div><dt>Result</dt><dd>1st place in Morocco, and a place at the international championship in Houston</dd></div><div><dt>Code</dt><dd>Me, starting from zero web experience</dd></div><div><dt>Stack</dt><dd>HTML, CSS, JavaScript, PWA, Leaflet, Web Speech API, QRCode.js, Canvas</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="archaeosmart" role="group" aria-label="ArchaeoSmart: 4 screens"><button type="button" class="sf is-phone" data-full="images/archaeo-home.webp" data-alt="ArchaeoSmart home screen on a phone: counters and six tool buttons" aria-label="View larger: ArchaeoSmart home screen on a phone: counters and six tool buttons"><img src="images/t/archaeo-home.webp" width="204" height="440" alt="ArchaeoSmart home screen on a phone: counters and six tool buttons" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/archaeo-record.webp" data-alt="New artifact form: find type, condition, site and GPS fields" aria-label="View larger: New artifact form: find type, condition, site and GPS fields"><img src="images/t/archaeo-record.webp" width="204" height="440" alt="New artifact form: find type, condition, site and GPS fields" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/archaeo-voice.webp" data-alt="Voice interview screen: press start to begin the guided recording" aria-label="View larger: Voice interview screen: press start to begin the guided recording"><img src="images/t/archaeo-voice.webp" width="204" height="440" alt="Voice interview screen: press start to begin the guided recording" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/archaeo-map.webp" data-alt="The artifact map, centred on Morocco" aria-label="View larger: The artifact map, centred on Morocco"><img src="images/t/archaeo-map.webp" width="204" height="440" alt="The artifact map, centred on Morocco" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>What it does</h3><div class="sd-text"><p>A mobile-first web app you can install: voice-guided recording of each find, GPS tags, QR labels you can print and scan, a canvas for site sketches, a map, statistics and CSV export. There is no server. Everything happens on the phone, so it works offline.</p></div></section>
+      <section class="sd-row"><h3>How it works</h3><div class="sd-text"><dl class="sd-terms"><div><dt>Input</dt><dd>Spoken answers, form fields, GPS position, QR scans and sketches</dd></div><div><dt>Storage</dt><dd>Each record is saved on the device, so the app keeps working without internet</dd></div><div><dt>Finding things again</dt><dd>QR codes and searchable IDs connect a physical find to its record</dd></div></dl><p>The constraint that shaped everything was reliability in the field. The app had to keep collecting data when the network disappeared, so offline was the core of the design, not an extra.</p></div></section>
+      <section class="sd-row"><h3>The hardest part</h3><div class="sd-text"><p>The voice interview, where the app asks questions and you answer out loud. Getting the Web Speech API to behave the same on iOS and Android took weeks. Safari handles microphone permissions differently from Chrome, and stopping continuous recognition from cutting people off mid-answer took a lot of attempts. It works now.</p></div></section>
+      <section class="sd-row"><h3>What I’d fix</h3><div class="sd-text"><p>Records live in the browser’s storage and disappear if it’s cleared. A real version needs a sync queue, a remote database, accounts, and a way to merge two people editing the same find offline. I’d start with an event log and only reach for CRDT-style merging if collaboration became central.</p></div></section>
+      <section class="sd-row"><h3>What I learned</h3><div class="sd-text"><p>Building something that has to work in a field teaches you things you’d never look up on your own. I had no web experience when the season started, and neither did my teammates.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/sia" data-open="sia">SIA films</a>, two motion films</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-sia" data-k="film" aria-labelledby="p-sia-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">SIA films</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-sia-h">SIA films</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">Two films for SIA (Students in Action), the senior student board at GS Universalis in Casablanca: 98 seconds on their year, and a 32-second reveal of the team.</p>
+          
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>October 2026</dd></div><div><dt>My part</dt><dd>I picked the story and the sources</dd></div><div><dt>Code</dt><dd>Claude Code drew the frames and synthesised the soundtrack</dd></div><div><dt>Format</dt><dd>1920×1080, 30 fps, 98 s and 32 s</dd></div><div><dt>Stack</dt><dd>Canvas 2D, headless Chrome, ffmpeg, Web Audio</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="sia" role="group" aria-label="SIA films: 10 screens"><button type="button" class="sf" data-video="images/sia-teaser.mp4" data-full="images/t/sia-first-place.webp" data-alt="Eleven silent seconds from the film: a football pitch turns into the “1st place” trophy card" aria-label="View larger: Eleven silent seconds from the film: a football pitch turns into the “1st place” trophy card"><video class="m" src="images/sia-teaser.mp4" poster="images/t/sia-first-place.webp" width="1280" height="720" muted loop playsinline preload="none" aria-label="Eleven silent seconds from the film: a football pitch turns into the “1st place” trophy card"></video></button><button type="button" class="sf" data-full="images/sia-act.webp" data-alt="Title card from the SIA film: “We act” over ink splashes" aria-label="View larger: Title card from the SIA film: “We act” over ink splashes"><img src="images/t/sia-act.webp" width="782" height="440" alt="Title card from the SIA film: “We act” over ink splashes" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-what-we-do.webp" data-alt="“What we do”: three cards, Represent, Organize and Give back" aria-label="View larger: “What we do”: three cards, Represent, Organize and Give back"><img src="images/t/sia-what-we-do.webp" width="782" height="440" alt="“What we do”: three cards, Represent, Organize and Give back" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-kindness.webp" data-alt="“Our ultimate goal is to spread love &amp; kindness”" aria-label="View larger: “Our ultimate goal is to spread love &amp; kindness”"><img src="images/t/sia-kindness.webp" width="782" height="440" alt="“Our ultimate goal is to spread love &amp; kindness”" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-first-place.webp" data-alt="“1st place, trophy secured” over gold light rays" aria-label="View larger: “1st place, trophy secured” over gold light rays"><img src="images/t/sia-first-place.webp" width="782" height="440" alt="“1st place, trophy secured” over gold light rays" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-edition.webp" data-alt="Tournament card: “Edition #2, Nov 23”" aria-label="View larger: Tournament card: “Edition #2, Nov 23”"><img src="images/t/sia-edition.webp" width="782" height="440" alt="Tournament card: “Edition #2, Nov 23”" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-on-the-day.webp" data-alt="“On the day”: bake sale and curated playlist cards" aria-label="View larger: “On the day”: bake sale and curated playlist cards"><img src="images/t/sia-on-the-day.webp" width="782" height="440" alt="“On the day”: bake sale and curated playlist cards" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-campus.webp" data-alt="“One campus, four cycles”: preschool to high school as rising blocks" aria-label="View larger: “One campus, four cycles”: preschool to high school as rising blocks"><img src="images/t/sia-campus.webp" width="782" height="440" alt="“One campus, four cycles”: preschool to high school as rising blocks" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-results.webp" data-alt="“100% success” with a ring chart of the baccalaureate results" aria-label="View larger: “100% success” with a ring chart of the baccalaureate results"><img src="images/t/sia-results.webp" width="782" height="440" alt="“100% success” with a ring chart of the baccalaureate results" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sia-end-card.webp" data-alt="End card: the SIA seal and “Students in Action”" aria-label="View larger: End card: the SIA seal and “Students in Action”"><img src="images/t/sia-end-card.webp" width="782" height="440" alt="End card: the SIA seal and “Students in Action”" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>What’s in it</h3><div class="sd-text"><p>The long film covers the charity football tournament they won, their bake sales, the school itself and the baccalaureate results. The colours were sampled from SIA’s own posters and jerseys, and the logos were redrawn as vectors.</p></div></section>
+      <section class="sd-row"><h3>How it was made</h3><div class="sd-text"><p>There’s no video editor involved. Each frame is drawn by code on an HTML canvas, captured by a browser running without a screen, and encoded with ffmpeg. The soundtrack is generated in code too, with no samples.</p></div></section>
+      <section class="sd-row"><h3>On this page</h3><div class="sd-text"><p>The stills here are title cards only. They show no faces and no students’ names.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/svvvd" data-open="svvvd">SVVVD Y2K</a>, streetwear store</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-svvvd" data-k="web" aria-labelledby="p-svvvd-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">SVVVD Y2K</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-svvvd-h">SVVVD Y2K</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">My cousin runs a Y2K-inspired streetwear brand and needed a site with the same energy as the clothes. Real products, real customers, real money.</p>
+          <p class="sd-links"><a class="btn btn-dossier" href="https://semo-el.github.io/SVVVD-Y2K/" target="_blank" rel="noopener">Open the store<span class="vh"> (opens in a new tab)</span></a><a class="tlink" href="https://github.com/SEMO-EL/SVVVD-Y2K" target="_blank" rel="noopener">Code on GitHub<span class="vh"> (opens in a new tab)</span></a></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>2026, built in one day</dd></div><div><dt>Scope</dt><dd>The store and the whole identity: type, colours, copy and layout</dd></div><div><dt>Code</dt><dd>Me, in plain HTML, CSS and JavaScript</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="svvvd" role="group" aria-label="SVVVD Y2K: 4 screens"><button type="button" class="sf" data-full="images/svvvd-home.webp" data-alt="SVVVD Y2K homepage: chrome pill logo and “Wear it your way”" aria-label="View larger: SVVVD Y2K homepage: chrome pill logo and “Wear it your way”"><img src="images/t/svvvd-home.webp" width="852" height="440" alt="SVVVD Y2K homepage: chrome pill logo and “Wear it your way”" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/svvvd-drop.webp" data-alt="Drop 001: Red Flag and Azul stamped sold out, Pinked still available, 450 MAD each" aria-label="View larger: Drop 001: Red Flag and Azul stamped sold out, Pinked still available, 450 MAD each"><img src="images/t/svvvd-drop.webp" width="704" height="440" alt="Drop 001: Red Flag and Azul stamped sold out, Pinked still available, 450 MAD each" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/svvvd-colorways.webp" data-alt="“Three colorways, one code” and “A brand in motion” sections" aria-label="View larger: “Three colorways, one code” and “A brand in motion” sections"><img src="images/t/svvvd-colorways.webp" width="704" height="440" alt="“Three colorways, one code” and “A brand in motion” sections" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/svvvd-contact.webp" data-alt="“Stay in the loop”, with the brand’s Instagram and email" aria-label="View larger: “Stay in the loop”, with the brand’s Instagram and email"><img src="images/t/svvvd-contact.webp" width="704" height="440" alt="“Stay in the loop”, with the brand’s Instagram and email" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>What I built</h3><div class="sd-text"><p>A shop with a cart, size choice, live stock and orders sent by email, plus the brand around it. Drop 001 is 35 pieces in three colourways, Red Flag, Azul and Pinked, at 450 MAD each. On the live store, Red Flag and Azul are marked sold out.</p></div></section>
+      <section class="sd-row"><h3>How it sells</h3><div class="sd-text"><dl class="sd-terms"><div><dt>Cart</dt><dd>Size and colour choices update the order before checkout</dd></div><div><dt>Stock</dt><dd>What’s left is shown early, so nobody picks something that’s gone</dd></div><div><dt>Order</dt><dd>An email-based pipeline: simple, and enough for real purchases</dd></div></dl><p>This one is less computer science and more product work: fewer steps, clear signals that the shop is real, and the smallest system that lets someone buy.</p></div></section>
+      <section class="sd-row"><h3>What it taught me</h3><div class="sd-text"><p>Every layout choice, line of copy and colour changes whether someone buys or leaves. Design and engineering turned out to be the same job here.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/workspace" data-open="workspace">Workspace OS</a>, multi-tenant backend</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-workspace" data-k="web" aria-labelledby="p-workspace-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Workspace OS</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-workspace-h">Workspace OS</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">Everything I’d built before had no database, no accounts and no server. I knew that gap would hold me back, so I built an app just to close it.</p>
+          <p class="sd-links"><a class="btn btn-dossier" href="https://semo-el.github.io/Workspace_OS/" target="_blank" rel="noopener">Open the app<span class="vh"> (opens in a new tab)</span></a><a class="tlink" href="https://github.com/SEMO-EL/Workspace_OS" target="_blank" rel="noopener">Code on GitHub<span class="vh"> (opens in a new tab)</span></a></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>2026, built in one day</dd></div><div><dt>Why</dt><dd>Deliberate practice: learn how backends really work</dd></div><div><dt>Code</dt><dd>Me</dd></div><div><dt>Stack</dt><dd>Supabase, PostgreSQL, row-level security, JavaScript</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="workspace" role="group" aria-label="Workspace OS: 2 screens"><button type="button" class="sf" data-full="images/workspace-dashboard.webp" data-alt="Workspace OS dashboard: workspaces with roles, invite codes, projects and tasks" aria-label="View larger: Workspace OS dashboard: workspaces with roles, invite codes, projects and tasks"><img src="images/t/workspace-dashboard.webp" width="848" height="440" alt="Workspace OS dashboard: workspaces with roles, invite codes, projects and tasks" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/workspace-login.webp" data-alt="Workspace OS sign-in screen" aria-label="View larger: Workspace OS sign-in screen"><img src="images/t/workspace-login.webp" width="704" height="440" alt="Workspace OS sign-in screen" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>What it does</h3><div class="sd-text"><p>Email and password accounts, workspaces you can create and delete, two roles (owner and member), invite codes, projects, tasks with priorities, and an audit log of who did what.</p></div></section>
+      <section class="sd-row"><h3>How the data works</h3><div class="sd-text"><dl class="sd-terms"><div><dt>Things</dt><dd>Users, workspaces, memberships, projects, tasks, audit logs</dd></div><div><dt>Links</dt><dd>A user can join many workspaces; workspaces own projects; projects own tasks</dd></div><div><dt>The rule</dt><dd>Nobody reads or changes anything outside the workspaces they belong to</dd></div></dl><p>Supabase handles sign-in and the PostgreSQL database. Row-level security enforces the rule inside the database, not only in the interface, so even if someone skips the front end the database still says no.</p></div></section>
+      <section class="sd-row"><h3>What I learned</h3><div class="sd-text"><p>The hard part wasn’t the code. It was thinking in relationships: who owns what, and how do you stop a member from deleting an owner’s project? Those are design questions before they’re coding questions.</p></div></section>
+      <section class="sd-row"><h3>Trade-offs and next</h3><div class="sd-text"><p>Supabase let me learn accounts, relational data and row-level security fast, but it ties the project to its way of writing rules. Next I’d add live collaboration, email invites, pagination for big workspaces, and server-side functions for actions that shouldn’t run in the browser.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/posesandbox" data-open="posesandbox">PoseSandbox</a>, 3d posing tool</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-posesandbox" data-k="game" aria-labelledby="p-posesandbox-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">PoseSandbox</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-posesandbox-h">PoseSandbox</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">Artists need quick 3D pose references, and most tools are expensive desktop software or clumsy web ports. I wanted one that opens instantly, needs no account and exports an image without fuss.</p>
+          <p class="sd-links"><a class="btn btn-dossier" href="https://semo-el.github.io/PoseSandbox/" target="_blank" rel="noopener">Open PoseSandbox<span class="vh"> (opens in a new tab)</span></a><a class="tlink" href="https://github.com/SEMO-EL/PoseSandbox" target="_blank" rel="noopener">Code on GitHub<span class="vh"> (opens in a new tab)</span></a></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>2024–25, my first website</dd></div><div><dt>Code</dt><dd>Me</dd></div><div><dt>Stack</dt><dd>Three.js, WebGL, transform controls, JSON save files</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="posesandbox" role="group" aria-label="PoseSandbox: 5 screens"><button type="button" class="sf" data-video="images/posesandbox-film.mp4" data-full="images/t/posesandbox-film-poster.webp" data-alt="PoseSandbox launch film, 20 seconds, with voice-over" aria-label="View larger: PoseSandbox launch film, 20 seconds, with voice-over"><video class="m" src="images/posesandbox-film.mp4" poster="images/t/posesandbox-film-poster.webp" width="1920" height="1080" muted loop playsinline preload="none" aria-label="PoseSandbox launch film, 20 seconds, with voice-over"></video></button><button type="button" class="sf" data-full="images/posesandbox-editor.webp" data-alt="PoseSandbox editor: a posable figure on a grid, with selection, gizmo and reference panels" aria-label="View larger: PoseSandbox editor: a posable figure on a grid, with selection, gizmo and reference panels"><img src="images/t/posesandbox-editor.webp" width="850" height="440" alt="PoseSandbox editor: a posable figure on a grid, with selection, gizmo and reference panels" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/posesandbox-home.webp" data-alt="PoseSandbox landing page: “Pose faster. Create better.”" aria-label="View larger: PoseSandbox landing page: “Pose faster. Create better.”"><img src="images/t/posesandbox-home.webp" width="850" height="440" alt="PoseSandbox landing page: “Pose faster. Create better.”" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/posesandbox-packs.webp" data-alt="PoseSandbox’s pose packs section with three tiers" aria-label="View larger: PoseSandbox’s pose packs section with three tiers"><img src="images/t/posesandbox-packs.webp" width="704" height="440" alt="PoseSandbox’s pose packs section with three tiers" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/posesandbox-faq.webp" data-alt="PoseSandbox’s frequently asked questions" aria-label="View larger: PoseSandbox’s frequently asked questions"><img src="images/t/posesandbox-faq.webp" width="704" height="440" alt="PoseSandbox’s frequently asked questions" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>How it works</h3><div class="sd-text"><dl class="sd-terms"><div><dt>Interface</dt><dd>Tool buttons, modes, save and load, reference image, export</dd></div><div><dt>Interaction</dt><dd>Mouse input turned into 3D intent with raycasting, selection and transform controls</dd></div><div><dt>Rendering</dt><dd>The Three.js scene, camera, lights, body parts, props and redraw loop</dd></div></dl><ol class="sd-steps" aria-label="What happens on a click"><li>Click</li><li>Raycast</li><li>Select a joint</li><li>Transform</li><li>Render</li><li>Export or save</li></ol><p>Showing a 3D model was the easy part. The real problem was turning a 2D click or drag into a predictable 3D move, while keeping the camera, joint selection and transforms from fighting each other. Keys 1 to 4 switch between rotate, move, orbit and scale.</p></div></section>
+      <section class="sd-row"><h3>Why Three.js</h3><div class="sd-text"><p>Raw WebGL would have meant spending the whole project on shaders and buffers. Three.js gave me a scene graph, camera controls, lights and loaders, so I could work on the harder problem: making 3D posing understandable to people who aren’t technical.</p></div></section>
+      <section class="sd-row"><h3>Trade-offs</h3><div class="sd-text"><p>It uses a hand-built joint hierarchy instead of a full skeletal rig. That made it buildable as a first 3D app, but rotations can feel mechanical, and complex poses take more work than inverse kinematics would.</p></div></section>
+      <section class="sd-row"><h3>What I’d change</h3><div class="sd-text"><p>A real rig with inverse kinematics, undo and redo through state snapshots, cleaner separation between rendering and interface code, and limits that keep heavy scenes fast. The biggest lesson: interactive tools are mostly state problems, and confusing state makes a confusing tool.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/mana" data-open="mana">Mana Vessel</a>, open-world fantasy rpg</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-mana" data-k="game" aria-labelledby="p-mana-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Mana Vessel</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-mana-h">Mana Vessel</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">A third-person open-world action RPG that ships as one HTML file, inspired by the anime Mushoku Tensei. It started as a one-valley slice and is now three chapters long, following my own 2D version of the story.</p>
+          <p class="sd-links"><span class="local">Runs locally, not deployed</span></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>Sep – Oct 2026, 141 commits</dd></div><div><dt>My part</dt><dd>The story (from my 2D version), the world, testing, and two of the character models</dd></div><div><dt>Code</dt><dd>Chapter I by Codex; Chapters II and III, the heroes and the spell effects by Claude Code</dd></div><div><dt>Stack</dt><dd>Three.js r170, procedural terrain, post-processing</dd></div><div><dt>Note</dt><dd>A personal fan project, not commercial</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="mana" role="group" aria-label="Mana Vessel: 9 screens"><button type="button" class="sf" data-full="images/mana-heroes.webp" data-alt="The hero cast lined up in Roa: Rudeus, Eris, Ghislaine, Roxy and more" aria-label="View larger: The hero cast lined up in Roa: Rudeus, Eris, Ghislaine, Roxy and more"><img src="images/t/mana-heroes.webp" width="782" height="440" alt="The hero cast lined up in Roa: Rudeus, Eris, Ghislaine, Roxy and more" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-demon-waste.webp" data-alt="Dusk on the Demon Continent: red mesas and dry grass under a rust sky" aria-label="View larger: Dusk on the Demon Continent: red mesas and dry grass under a rust sky"><img src="images/t/mana-demon-waste.webp" width="782" height="440" alt="Dusk on the Demon Continent: red mesas and dry grass under a rust sky" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-migurd.webp" data-alt="The Migurd village: round huts behind a wooden fence at dusk" aria-label="View larger: The Migurd village: round huts behind a wooden fence at dusk"><img src="images/t/mana-migurd.webp" width="782" height="440" alt="The Migurd village: round huts behind a wooden fence at dusk" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-fireball.webp" data-alt="A fireball bursting between two wolves near the forge" aria-label="View larger: A fireball bursting between two wolves near the forge"><img src="images/t/mana-fireball.webp" width="782" height="440" alt="A fireball bursting between two wolves near the forge" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-storm.webp" data-alt="A lightning strike on the storm plateau, rain falling in grey light" aria-label="View larger: A lightning strike on the storm plateau, rain falling in grey light"><img src="images/t/mana-storm.webp" width="782" height="440" alt="A lightning strike on the storm plateau, rain falling in grey light" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-title.webp" data-alt="Mana Vessel title screen over a valley with a village and a river" aria-label="View larger: Mana Vessel title screen over a valley with a village and a river"><img src="images/t/mana-title.webp" width="704" height="440" alt="Mana Vessel title screen over a valley with a village and a river" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-sunset.webp" data-alt="The hero with a staff at sunset, beside a forge and a watermill" aria-label="View larger: The hero with a staff at sunset, beside a forge and a watermill"><img src="images/t/mana-sunset.webp" width="704" height="440" alt="The hero with a staff at sunset, beside a forge and a watermill" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-morning.webp" data-alt="Morning in the village, with two wolves coming across the field" aria-label="View larger: Morning in the village, with two wolves coming across the field"><img src="images/t/mana-morning.webp" width="704" height="440" alt="Morning in the village, with two wolves coming across the field" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/mana-wolves.webp" data-alt="The hero facing a pack of wolves near the forge" aria-label="View larger: The hero facing a pack of wolves near the forge"><img src="images/t/mana-wolves.webp" width="704" height="440" alt="The hero facing a pack of wolves near the forge" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>What’s in it</h3><div class="sd-text"><ul class="sd-list"><li>Terrain, water, foliage and a sky that runs through a full day and night.</li><li>A village, caves, a tower and fast travel between waystones.</li><li>Spells in five schools (fire, water, wind, stone and healing), plus sword combat.</li><li>Enemies, bosses, a world map, dialogue and saves.</li></ul></div></section>
+      <section class="sd-row"><h3>The chapters</h3><div class="sd-text"><ul class="sd-list"><li><b>I. Buena Village:</b> a valley, a forest, the Weeping Cave and its warden, up to the gates of Roa.</li><li><b>II. Roa:</b> a walled city, the guild, a sword master to spar with, a kidnapping you can sneak through or fight through, bandits and a stone golem.</li><li><b>III. The Demon Continent:</b> a red waste, the Migurd village, a storm plateau, a raiders’ camp and the Sand Mother, a boss that burrows.</li></ul></div></section>
+      <section class="sd-row"><h3>The heroes</h3><div class="sd-text"><p>The cast was rebuilt from small chibi models into full-size heroes, built in code to match the painted portraits, with new animations, voice blips and spell effects for each school of magic.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/differential" data-open="differential">Open differential</a>, interactive gear figure</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-differential" data-k="film" aria-labelledby="p-differential-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Open differential</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-differential-h">Open differential</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">A car’s open differential on a test bench, running live. Move across it, or use the arrow keys, to steer: the spider gears start to spin, one wheel speeds up, the other slows by exactly as much, and the ring gear keeps turning at their average.</p>
+          
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>October 2026</dd></div><div><dt>My part</dt><dd>I chose the subject</dd></div><div><dt>Code</dt><dd>Claude Code designed the machine and wrote the code</dd></div><div><dt>Stack</dt><dd>SVG, isometric projection, gear kinematics, vanilla JavaScript</dd></div></dl>
+      </header>
+      <figure class="sd-live"><iframe class="figure-embed" data-figure src="explainers/differential.html" title="Interactive open differential: move across the figure, or use the arrow keys, to steer" loading="lazy"></iframe></figure>
+      <div class="sd-frames" data-group="differential" role="group" aria-label="Open differential: 2 screens"><button type="button" class="sf" data-full="images/differential-straight.webp" data-alt="The differential driving straight: both wheels at 100 rpm, spider gears still" aria-label="View larger: The differential driving straight: both wheels at 100 rpm, spider gears still"><img src="images/t/differential-straight.webp" width="620" height="440" alt="The differential driving straight: both wheels at 100 rpm, spider gears still" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/differential-turn.webp" data-alt="Turning right: left wheel at 170 rpm, right at 30, spider gears spinning" aria-label="View larger: Turning right: left wheel at 170 rpm, right at 30, spider gears spinning"><img src="images/t/differential-turn.webp" width="620" height="440" alt="Turning right: left wheel at 170 rpm, right at 30, spider gears spinning" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>The numbers</h3><div class="sd-text"><p>Every number in the readout comes from real ratios: a 41:11 ring and pinion, 16- and 10-tooth bevel gears and a 1.6 m track. The machine is SVG redrawn every frame, and the drawing order of its 46 parts was checked by ray-casting about 7,000 overlaps at 48 angles.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/evenly" data-open="evenly">Evenly</a>, expense splitter</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-evenly" data-k="web" aria-labelledby="p-evenly-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Evenly</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-evenly-h">Evenly</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">Split a group’s costs, then settle up in as few payments as possible.</p>
+          <p class="sd-links"><span class="local">A single offline file</span></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>September 2026</dd></div><div><dt>Code</dt><dd>Written by Codex, an AI coding agent</dd></div><div><dt>Stack</dt><dd>Vanilla JavaScript, works offline</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="evenly" role="group" aria-label="Evenly: 4 screens"><button type="button" class="sf" data-full="images/evenly-trip.webp" data-alt="Evenly with an example Lisbon weekend: expenses, balances and a three-payment settle-up plan" aria-label="View larger: Evenly with an example Lisbon weekend: expenses, balances and a three-payment settle-up plan"><img src="images/t/evenly-trip.webp" width="704" height="440" alt="Evenly with an example Lisbon weekend: expenses, balances and a three-payment settle-up plan" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/evenly-add.webp" data-alt="Adding an expense: amount, who paid, the date and how to split it" aria-label="View larger: Adding an expense: amount, who paid, the date and how to split it"><img src="images/t/evenly-add.webp" width="704" height="440" alt="Adding an expense: amount, who paid, the date and how to split it" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/evenly-phone.webp" data-alt="Evenly on a phone: the trip’s list of expenses" aria-label="View larger: Evenly on a phone: the trip’s list of expenses"><img src="images/t/evenly-phone.webp" width="204" height="440" alt="Evenly on a phone: the trip’s list of expenses" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf is-phone" data-full="images/evenly-phone-balances.webp" data-alt="Evenly on a phone: what each person owes or is owed" aria-label="View larger: Evenly on a phone: what each person owes or is owed"><img src="images/t/evenly-phone-balances.webp" width="204" height="440" alt="Evenly on a phone: what each person owes or is owed" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>Money</h3><div class="sd-text"><p>Amounts are stored in whole cents. When a bill doesn’t divide evenly, the leftover cents are handed out by largest remainder, so the shares always add up to the total.</p></div></section>
+      <section class="sd-row"><h3>Settling up</h3><div class="sd-text"><p>Finding the true minimum number of payments is NP-hard, so Evenly pairs people whose amounts match exactly first, then matches the largest debt with the largest credit until everyone is even.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/vector" data-open="vector">Vector Strike</a>, first shooter prototype</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-vector" data-k="game" aria-labelledby="p-vector-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Vector Strike</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-vector-h">Vector Strike</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">My first browser tactical shooter: one map, four weapon types, 5v5 against bots, plant and defuse, and touch controls for phones.</p>
+          <p class="sd-links"><span class="local">Runs locally, not deployed</span></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>September 2026</dd></div><div><dt>Code</dt><dd>Written by Codex, an AI coding agent</dd></div><div><dt>Stack</dt><dd>Three.js</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="vector" role="group" aria-label="Vector Strike: 2 screens"><button type="button" class="sf" data-full="images/vector-loadout.webp" data-alt="Vector Strike’s loadout menu over the coastal research facility map" aria-label="View larger: Vector Strike’s loadout menu over the coastal research facility map"><img src="images/t/vector-loadout.webp" width="704" height="440" alt="Vector Strike’s loadout menu over the coastal research facility map" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/vector-round.webp" data-alt="A round of Vector Strike starting: rifle out, score and timer at the top" aria-label="View larger: A round of Vector Strike starting: rifle out, score and timer at the top"><img src="images/t/vector-round.webp" width="704" height="440" alt="A round of Vector Strike starting: rifle out, score and timer at the top" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <section class="sd-row"><h3>What it taught me</h3><div class="sd-text"><p>It showed what a serious version would need: a deterministic simulation, abilities, an economy and smarter bots. The rules lived inside the rendering code, so nothing could be tested without playing. That version became <a href="#work/ironline" data-open="ironline">Ironline</a>.</p></div></section>
+      <p class="sd-next">Next: <a href="#work/nakama" data-open="nakama">Nakama Store</a>, katana shop site</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-nakama" data-k="web" aria-labelledby="p-nakama-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Nakama Store</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-nakama-h">Nakama Store</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">A product site for a katana shop in Marrakech. A split “Black Dragon vs White Dragon” hero leads into the details, a comparison, pricing and ordering through WhatsApp or Instagram.</p>
+          <p class="sd-links"><a class="btn btn-dossier" href="https://semo-el.github.io/Nakama_V2/" target="_blank" rel="noopener">Open the site<span class="vh"> (opens in a new tab)</span></a></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>June 2026</dd></div><div><dt>Code</dt><dd>Me</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="nakama" role="group" aria-label="Nakama Store: 1 screens"><button type="button" class="sf" data-full="images/nakama-home.webp" data-alt="Nakama Store hero: the Black Dragon and White Dragon katanas side by side" aria-label="View larger: Nakama Store hero: the Black Dragon and White Dragon katanas side by side"><img src="images/t/nakama-home.webp" width="704" height="440" alt="Nakama Store hero: the Black Dragon and White Dragon katanas side by side" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <p class="sd-next">Next: <a href="#work/sunset" data-open="sunset">Sunset Event</a>, event booking site</p>
+    </div>
+  </dialog>
+
+  <dialog class="sheetd" id="p-sunset" data-k="web" aria-labelledby="p-sunset-h">
+    <div class="sd-inner">
+      <div class="sd-bar"><span class="sd-bar-name" aria-hidden="true">Sunset Event</span><button class="sd-close" type="button" data-close>Close</button></div>
+      <header class="sd-head">
+        <h2 id="p-sunset-h">Sunset Event</h2>
+        <div class="sd-intro">
+          <p class="sd-lead">A French-language site for an outdoor event-setup service around Casablanca: beach dinners, picnics and celebrations, with themed set-ups, packages, a gallery and booking through WhatsApp.</p>
+          <p class="sd-links"><a class="btn btn-dossier" href="https://semo-el.github.io/Sunset/" target="_blank" rel="noopener">Open the site<span class="vh"> (opens in a new tab)</span></a></p>
+        </div>
+        <dl class="sd-meta"><div><dt>When</dt><dd>June 2026</dd></div><div><dt>Code</dt><dd>Me</dd></div></dl>
+      </header>
+      
+      <div class="sd-frames" data-group="sunset" role="group" aria-label="Sunset Event: 3 screens"><button type="button" class="sf" data-full="images/sunset-home.webp" data-alt="Sunset Event homepage: “Des moments dehors, préparés avec douceur”" aria-label="View larger: Sunset Event homepage: “Des moments dehors, préparés avec douceur”"><img src="images/t/sunset-home.webp" width="704" height="440" alt="Sunset Event homepage: “Des moments dehors, préparés avec douceur”" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sunset-ambiances.webp" data-alt="Themed set-ups: beach dinners, birthdays, forest and private gardens" aria-label="View larger: Themed set-ups: beach dinners, birthdays, forest and private gardens"><img src="images/t/sunset-ambiances.webp" width="704" height="440" alt="Themed set-ups: beach dinners, birthdays, forest and private gardens" class="m" loading="lazy" decoding="async"></button><button type="button" class="sf" data-full="images/sunset-packages.webp" data-alt="Packages, from a dinner for two to set-ups made to measure" aria-label="View larger: Packages, from a dinner for two to set-ups made to measure"><img src="images/t/sunset-packages.webp" width="704" height="440" alt="Packages, from a dinner for two to set-ups made to measure" class="m" loading="lazy" decoding="async"></button></div>
+      
+      <p class="sd-next">Next: <a href="#work/simoai" data-open="simoai">SimoAI</a>, local ai assistant</p>
+    </div>
+  </dialog>
+
+  <dialog class="viewer" id="viewer" aria-label="Screen viewer">
+    <figure class="v-fig">
+      <div class="v-media"><img id="vImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" draggable="false" /><video id="vVid" muted loop playsinline controls hidden></video></div>
+      <figcaption id="vCap"></figcaption>
+    </figure>
+    <div class="v-ui">
+      <button type="button" data-v="prev">Previous</button>
+      <span id="vCount" aria-live="polite"></span>
+      <button type="button" data-v="next">Next</button>
+      <button type="button" data-v="close" class="v-close">Close</button>
+    </div>
+  </dialog>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/lenis.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
