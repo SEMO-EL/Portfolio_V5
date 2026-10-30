@@ -578,7 +578,8 @@ export function createWorld({ bgCanvas, fgCanvas, mobile, calm }) {
     orbScreen() {
       if (!robot.root.visible) return null;
       const v = robot.orbWorldPosition(new THREE.Vector3()).project(camera);
-      return { x: (v.x + 1) / 2 * st.size[0], y: (1 - v.y) / 2 * st.size[1] };
+      const x = (v.x + 1) / 2 * st.size[0], y = (1 - v.y) / 2 * st.size[1];
+      return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;   // NaN before the first frame is drawn
     },
     // screen-space position of the robot's head, for the speech bubble
     headScreen() {
