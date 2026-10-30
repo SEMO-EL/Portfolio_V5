@@ -371,7 +371,7 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 .rune.cast { animation: cast 600ms var(--ease-out); }
 @keyframes cast { 30% { transform: scale(1.14); } }
 .scrolls { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; margin-top: 80px; max-width: 1400px; }
-.scroll-frame { position: relative; padding: 10px; background: linear-gradient(145deg, #3a2150, #1a0e2c); border-radius: 6px; box-shadow: 0 0 0 2px #d6a82e, 0 0 0 6px #1a0e2c, 0 0 0 7px rgba(214, 168, 46, 0.6), 0 30px 60px -20px rgba(0, 0, 0, 0.6); }
+.scroll-frame { position: relative; align-self: start; padding: 10px; background: linear-gradient(145deg, #3a2150, #1a0e2c); border-radius: 6px; box-shadow: 0 0 0 2px #d6a82e, 0 0 0 6px #1a0e2c, 0 0 0 7px rgba(214, 168, 46, 0.6), 0 30px 60px -20px rgba(0, 0, 0, 0.6); }
 .scroll-frame::before, .scroll-frame::after { content: ""; position: absolute; width: 26px; height: 26px; border: 3px solid #ffd36b; z-index: 2; pointer-events: none; }
 .scroll-frame::before { top: -6px; left: -6px; border-right: 0; border-bottom: 0; }
 .scroll-frame::after { bottom: -6px; right: -6px; border-left: 0; border-top: 0; }
@@ -494,21 +494,6 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 .ev-frames .sf { width: auto; height: 100%; flex: none; border-radius: 10px; overflow: hidden; background: #fff; }
 .ev-frames img { height: 100%; width: auto; }
 
-/* ================================================================== CREDITS */
-.w-void { color: #fff; }
-.credits-pin { min-height: 100svh; display: grid; place-items: start center; overflow: hidden; padding: 0 var(--m); }
-.roll { width: min(760px, 100%); padding: 40vh 0 30vh; text-align: center; }
-.roll-title { font-family: var(--font-space); font-weight: 400; font-size: clamp(2.6rem, 6vw, 5rem); letter-spacing: 0.1em; margin-bottom: 60px; }
-.roll-block { display: grid; gap: 4px; }
-.roll-block dt { margin-top: 40px; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: #8fa3d8; }
-.roll-block dd { font-size: clamp(1.1rem, 1rem + 0.6vw, 1.5rem); font-weight: 600; }
-.roll-brand { margin-top: 90px; display: grid; justify-items: center; gap: 18px; }
-.mark-xl { width: 120px; height: 120px; color: #6ee7ff; filter: drop-shadow(0 0 20px rgba(110, 231, 255, 0.5)); }
-.swatches { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
-.swatches li { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.8rem; color: #c9cfe6; }
-.swatches li::before { content: ""; width: 44px; height: 44px; border-radius: 50%; background: var(--s); box-shadow: 0 0 18px -2px var(--s); }
-.fonts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; font-size: 1.4rem; color: #fff; }
-.roll-end { margin-top: 100px; font-family: var(--font-space); font-size: clamp(1.4rem, 3vw, 2.4rem); color: #6ee7ff; }
 
 /* ================================================================== CONTACT: back to space */
 .contact { min-height: 100svh; display: grid; align-items: center; padding: 140px var(--m) 100px; overflow: clip; }

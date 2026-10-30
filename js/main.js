@@ -104,10 +104,9 @@ const CHAPTERS = {
   shipped: { label: 'Concrete', accent: '#dd614c', light: true, line: 'Everything here is live. Go and click something.' },
   studio: { label: 'Paper and ink', accent: '#2547d0', light: true, line: 'Every frame of those films was drawn by code.' },
   method: { label: 'Editorial', accent: '#e9e4d8', light: false, line: '' },
-  credits: { label: 'The credits', accent: '#ffffff', light: false, line: '' },
   contact: { label: 'Back to space', accent: '#6ee7ff', light: false, line: 'Say hi to Simo for me.' },
 };
-const LINES = { "start": [ "Hi! I’m S-01. Simo built my body for Ironline. Click me any time.", "Scroll down. I’ll walk.", "I have a halo here. Only here.", "Seven worlds. I’ve been to all of them." ], "origins": [ "This is where it started. Watch your step.", "Hit the blocks. They pay out.", "A Mario-style platformer in 2020. Very brave.", "Panama, then Houston. Not bad for a robot kid." ], "simoai": [ "Six models, one 16 GB card. We take turns.", "Pick a request. Watch it plan.", "The kitten was made on Simo’s GPU. No cloud.", "I asked for a circle once. Long story." ], "ironline": [ "The rules run 128 times a second. I counted.", "Shoot the bots, not me.", "Every rule here has a test. 290 of them.", "Aim for the visor." ], "mana": [ "Pick a rune and I’ll cast it.", "Three chapters so far. I’m in none of them.", "The Demon Continent is very red.", "Fire is the classic. Try healing." ], "shipped": [ "Everything here is live. Go and click something.", "Two colourways sold out. True story.", "Built in a day. Some of them.", "Concrete suits me." ], "studio": [ "Every frame of those films was drawn by code.", "Click the paper. Make a mess.", "The PoseSandbox film has a voice. Turn it on.", "I get a new paint job here." ], "method": [ "Read this one slowly." ], "credits": [ "Roll credits." ], "contact": [ "Say hi to Simo for me.", "The email button works. I checked.", "Thanks for walking with me.", "Want to go again? Scroll up." ] };
+const LINES = { "start": [ "Hi! I’m S-01. Simo built my body for Ironline. Click me any time.", "Scroll down. I’ll walk.", "I have a halo here. Only here.", "Seven worlds. I’ve been to all of them." ], "origins": [ "This is where it started. Watch your step.", "Hit the blocks. They pay out.", "A Mario-style platformer in 2020. Very brave.", "Panama, then Houston. Not bad for a robot kid." ], "simoai": [ "Six models, one 16 GB card. We take turns.", "Pick a request. Watch it plan.", "The kitten was made on Simo’s GPU. No cloud.", "I asked for a circle once. Long story." ], "ironline": [ "The rules run 128 times a second. I counted.", "Shoot the bots, not me.", "Every rule here has a test. 290 of them.", "Aim for the visor." ], "mana": [ "Pick a rune and I’ll cast it.", "Three chapters so far. I’m in none of them.", "The Demon Continent is very red.", "Fire is the classic. Try healing." ], "shipped": [ "Everything here is live. Go and click something.", "Two colourways sold out. True story.", "Built in a day. Some of them.", "Concrete suits me." ], "studio": [ "Every frame of those films was drawn by code.", "Click the paper. Make a mess.", "The PoseSandbox film has a voice. Turn it on.", "I get a new paint job here." ], "method": [ "Read this one slowly." ], "contact": [ "Say hi to Simo for me.", "The email button works. I checked.", "Thanks for walking with me.", "Want to go again? Scroll up." ] };
 const lineAt = {};
 function nextLine(id) { const L = LINES[id] || LINES.start; const i = (lineAt[id] = ((lineAt[id] ?? -1) + 1) % L.length); return L[i]; }
 const parsePose = (s) => { const [x, y, h, rot] = (s || '0,-2,0.3,0').split(',').map(Number); return { x, y, h, rot }; };
@@ -577,16 +576,6 @@ if (scrub) {
       },
     });
   }
-}
-
-/* ------------------------------------------------------------------ CREDITS: the roll */
-if (hasGsap) {
-  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
-    const roll = $('#roll');
-    const distance = () => Math.max(0, roll.offsetHeight - window.innerHeight * 0.55);
-    const tween = gsap.to(roll, { y: () => -distance(), ease: 'none', scrollTrigger: { trigger: '#creditsPin', pin: true, start: 'top top', end: () => '+=' + distance(), scrub: 0.5, invalidateOnRefresh: true } });
-    return () => { tween.scrollTrigger?.kill(); tween.kill(); };
-  });
 }
 
 /* ------------------------------------------------------------------ world map */

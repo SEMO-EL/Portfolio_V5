@@ -18,7 +18,6 @@ effects for shots, coins, spells and ink. It is off until the visitor turns it o
 | Shipped | Concrete (brutalist) | accordion of seven live sites and tools |
 | Studio | Paper and ink (artistic) | click to splash ink (the robot reacts); the PoseSandbox launch film with sound; SIA film loop; the open differential |
 | How I work | Editorial | words light up as you read; three pieces of evidence |
-| Credits | Black | end credits: who did what, and the identity system |
 | Contact | Back to space | email, Instagram, GitHub |
 
 ## Files
