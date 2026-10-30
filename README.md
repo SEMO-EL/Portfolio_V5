@@ -38,7 +38,7 @@ explainers/       the two live figures (GPU queue, open differential)
 ## Deploy
 
 Copy everything in this folder into the repository you publish from (currently
-`semo-el.github.io/Portfolio_V3/`), commit and push. Keep `.nojekyll`.
+`semo-el.github.io/Portfolio_V5/`), commit and push. Keep `.nojekyll`.
 If the address changes, update the canonical and og:image URLs at the top of `page-v5.html`
 and regenerate.
 
