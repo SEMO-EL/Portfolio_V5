@@ -473,10 +473,15 @@ if (screen) {
 /* ------------------------------------------------------------------ MANA VESSEL: cast a spell */
 const SPELL_LINES = { fire: 'Fire! Stand back.', water: 'Water. Everyone’s soaked now.', wind: 'Wind. Hold on to something.', stone: 'Stone. Very solid choice.', healing: 'Healing. I feel brand new.' };
 $$('.rune').forEach((rune) => rune.addEventListener('click', () => {
-  const spell = rune.dataset.spell;
+  const spell = rune.dataset.spell, r = rune.getBoundingClientRect();
   rune.classList.remove('cast'); void rune.offsetWidth; rune.classList.add('cast');
-  world?.castSpell(spell);
-  sound.fx('spell');
+  const seal = document.createElement('i');
+  seal.className = 'rune-seal'; seal.setAttribute('aria-hidden', 'true');
+  rune.appendChild(seal); setTimeout(() => seal.remove(), 1000);
+  // if the page covers S-01 (a screenshot frame, or off screen), the spell bursts out of the rune itself
+  const orb = world?.orbScreen(), top = orb && document.elementFromPoint(orb.x, orb.y);
+  world?.castSpell(spell, { x: r.left + r.width / 2, y: r.top + r.height / 2 }, !top || !!top.closest('.scroll-frame, img, video'));
+  sound.fx('spell_' + spell);
   say(SPELL_LINES[spell], 2200);
 }));
 

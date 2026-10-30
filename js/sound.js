@@ -61,8 +61,8 @@ export function createSound() {
     const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.connect(g).connect(master); o.start(t); o.stop(t + dur + 0.05);
   }
-  function noise(dur, from, to, vol = 0.3, type = 'bandpass') {
-    const t = ctx.currentTime;
+  function noise(dur, from, to, vol = 0.3, type = 'bandpass', delay = 0) {
+    const t = ctx.currentTime + delay;
     const n = ctx.createBufferSource(); n.buffer = noiseBuf;
     const f = ctx.createBiquadFilter(); f.type = type; f.Q.value = 1.2;
     f.frequency.setValueAtTime(from, t); f.frequency.exponentialRampToValueAtTime(to, t + dur);
@@ -74,7 +74,13 @@ export function createSound() {
     shot: () => { noise(0.22, 3000, 300, 0.9, 'lowpass'); tone(160, 50, 0.16, 'sine', 0.25); },
     hit: () => { tone(1800, 2400, 0.05, 'square', 0.05); tone(2400, 2400, 0.04, 'square', 0.04, 0.05); },
     coin: () => { tone(988, 988, 0.08, 'square', 0.06); tone(1319, 1319, 0.22, 'square', 0.06, 0.08); },
-    spell: () => { noise(0.9, 300, 4000, 0.35); tone(220, 880, 0.7, 'triangle', 0.08); },
+    // spells: a charge while the bolt flies, then each school's own sound when it lands (0.38 s)
+    charge: () => { noise(0.4, 400, 2600, 0.25); tone(300, 900, 0.38, 'sine', 0.05); },
+    spell_fire: () => { FX.charge(); noise(0.7, 2400, 200, 0.9, 'lowpass', 0.38); tone(110, 40, 0.6, 'sine', 0.3, 0.38); for (let i = 0; i < 7; i++) noise(0.05, 5000, 2500, 0.3, 'highpass', 0.45 + i * 0.09 + Math.random() * 0.05); },
+    spell_water: () => { FX.charge(); noise(0.8, 1800, 300, 0.4, 'lowpass', 0.38); for (let i = 0; i < 6; i++) tone(300 + Math.random() * 200, 900 + Math.random() * 500, 0.08, 'sine', 0.06, 0.4 + i * 0.07); },
+    spell_wind: () => { FX.charge(); noise(1.2, 300, 3000, 0.6, 'bandpass', 0.3); noise(1.0, 2500, 400, 0.35, 'bandpass', 0.8); },
+    spell_stone: () => { FX.charge(); tone(80, 32, 0.5, 'sine', 0.45, 0.38); noise(0.35, 1400, 150, 0.7, 'lowpass', 0.38); for (let i = 0; i < 6; i++) tone(220 + Math.random() * 120, 120, 0.05, 'triangle', 0.08, 0.7 + i * 0.12 + Math.random() * 0.06); },
+    spell_healing: () => { FX.charge(); [784, 988, 1175, 1568, 1976].forEach((f, i) => tone(f, f, 0.7, 'sine', 0.05, 0.38 + i * 0.08)); tone(392, 784, 1.0, 'triangle', 0.03, 0.38); },
     splat: () => { noise(0.18, 900, 200, 0.5, 'lowpass'); },
     hop: () => { tone(300, 600, 0.12, 'sine', 0.06); },
   };

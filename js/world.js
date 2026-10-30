@@ -162,12 +162,13 @@ const LIGHT = {
   editorial: { sky: '#d8e8e8', ground: '#141414', hemi: 0.9, key: '#ffffff', keyI: 1.8, rim: '#6ee7ff', rimI: 1.2 },
   void:      { sky: '#9fb8ff', ground: '#000000', hemi: 0.8, key: '#ffffff', keyI: 1.8, rim: '#6ee7ff', rimI: 2.0 },
 };
+// each school's particles mix from `color` to `hot`; how each one erupts is ERUPT in createWorld
 const SPELLS = {
-  fire:    { color: '#ff6a2b', gravity: 1.2, swirl: 0.0, spread: 1.0, rise: 1.6 },
-  water:   { color: '#3fa9ff', gravity: -3.5, swirl: 0.0, spread: 1.4, rise: 2.4 },
-  wind:    { color: '#c8fff2', gravity: 0.0, swirl: 4.0, spread: 1.2, rise: 0.6 },
-  stone:   { color: '#b08d5f', gravity: -6.0, swirl: 0.0, spread: 1.8, rise: 2.8 },
-  healing: { color: '#7dff9a', gravity: 0.6, swirl: 1.5, spread: 0.7, rise: 1.0 },
+  fire:    { color: '#ff4a14', hot: '#ffd36b' },
+  water:   { color: '#2f8cff', hot: '#d4f4ff' },
+  wind:    { color: '#9ff5dc', hot: '#ffffff' },
+  stone:   { color: '#9a7448', hot: '#ffcf8a' },
+  healing: { color: '#5dff8a', hot: '#fff3a6' },
 };
 
 export function createWorld({ bgCanvas, fgCanvas, mobile, calm }) {
@@ -281,23 +282,175 @@ export function createWorld({ bgCanvas, fgCanvas, mobile, calm }) {
   }
   Object.values(propGroups).forEach((g) => g.children.forEach((c) => { c.userData.home = c.position.clone(); c.userData.phase = Math.random() * 6.28; }));
 
-  // ---- spell particles
-  const N = mobile ? 220 : 420;
+  // ---- spells: a mana bolt flies from the rune to S-01's orb, then each school erupts its own way
+  const N = mobile ? 420 : 1000, Q = mobile ? 0.45 : 1;
+  const n = (k) => Math.round(k * Q);
   const pGeo = new THREE.BufferGeometry();
-  const pPos = new Float32Array(N * 3), pVel = new Float32Array(N * 3), pLife = new Float32Array(N), pSize = new Float32Array(N);
+  const pPos = new Float32Array(N * 3), pTint = new Float32Array(N * 3), pLife = new Float32Array(N), pSize = new Float32Array(N);
+  const pVel = new Float32Array(N * 3), pDecay = new Float32Array(N), pGrav = new Float32Array(N), pDrag = new Float32Array(N);
+  // helix particles (wind, healing, the water spiral) orbit their spawn point: angle, radius, spin, radius growth
+  const hA = new Float32Array(N), hR = new Float32Array(N), hW = new Float32Array(N), hG = new Float32Array(N), hX = new Float32Array(N), hZ = new Float32Array(N);
   pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  pGeo.setAttribute('tint', new THREE.BufferAttribute(pTint, 3));
   pGeo.setAttribute('life', new THREE.BufferAttribute(pLife, 1));
   pGeo.setAttribute('size', new THREE.BufferAttribute(pSize, 1));
   const pMat = new THREE.ShaderMaterial({
-    uniforms: { uColor: { value: new THREE.Color('#ff6a2b') }, uScale: { value: 1 } },
-    vertexShader: `attribute float life; attribute float size; varying float vLife; uniform float uScale;
-      void main(){ vLife = life; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * uScale * (0.4 + life) * (300.0 / -mv.z); gl_Position = projectionMatrix * mv; }`,
-    fragmentShader: `uniform vec3 uColor; varying float vLife;
-      void main(){ vec2 c = gl_PointCoord - 0.5; float d = length(c); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * vLife; gl_FragColor = vec4(uColor * (1.2 + vLife), a); }`,
+    uniforms: { uScale: { value: 1 } },
+    vertexShader: `attribute float life; attribute float size; attribute vec3 tint; varying float vLife; varying vec3 vTint; uniform float uScale;
+      void main(){ vLife = life; vTint = tint; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = size * uScale * (0.35 + life) * (12.0 / -mv.z); gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `varying float vLife; varying vec3 vTint;
+      void main(){ vec2 c = gl_PointCoord - 0.5; float d = length(c); if (d > 0.5) discard; float a = smoothstep(0.5, 0.0, d) * vLife;
+        gl_FragColor = vec4(mix(vTint, vec3(1.0), smoothstep(0.22, 0.0, d) * 0.7) * (1.0 + vLife), a); }`,
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
   const points = new THREE.Points(pGeo, pMat); points.frustumCulled = false; scene.add(points);
-  let spell = null; let spellT = 0;
+  let head = 0, fxLeft = 0;
+  const cA = new THREE.Color(), cB = new THREE.Color(), cT = new THREE.Color();
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  // one particle from the ring buffer (the oldest is reused); colour picked between cA and cB
+  function spawn(x, y, z, vx, vy, vz, o) {
+    const i = head, ix = i * 3; head = (head + 1) % N;
+    pPos[ix] = x; pPos[ix + 1] = y; pPos[ix + 2] = z; pVel[ix] = vx; pVel[ix + 1] = vy; pVel[ix + 2] = vz;
+    cT.copy(cA).lerp(cB, o.mix ?? Math.random()); pTint[ix] = cT.r; pTint[ix + 1] = cT.g; pTint[ix + 2] = cT.b;
+    pLife[i] = 1; pDecay[i] = o.decay * 0.65; pSize[i] = o.size; pGrav[i] = o.grav || 0; pDrag[i] = o.drag || 0;
+    const h = o.helix; hW[i] = h ? h.w : 0;
+    if (h) { hA[i] = h.a; hR[i] = h.r; hG[i] = h.g; hX[i] = x; hZ[i] = z; }
+  }
+  const sphere = (sp) => { const a = rnd(0, 6.283), u = rnd(-1, 1), r = Math.sqrt(1 - u * u); return [Math.cos(a) * r * sp, u * sp, Math.sin(a) * r * sp]; };
+
+  // stone: real rock shards that fly, tumble and bounce on the floor
+  const SH = 28;
+  const shards = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.07, 0), new THREE.MeshStandardMaterial({ color: '#c49a62', emissive: '#4a2c10', roughness: 0.9, flatShading: true }), SH);
+  shards.frustumCulled = false; scene.add(shards);
+  const sP = new Float32Array(SH * 3), sV = new Float32Array(SH * 3), sRot = new Float32Array(SH * 3), sSpin = new Float32Array(SH * 3), sLife = new Float32Array(SH), sSize = new Float32Array(SH);
+  let shardFloor = 0, shardG = 0;
+  const dummy = new THREE.Object3D();
+  function placeShards() {
+    for (let i = 0; i < SH; i++) {
+      const ix = i * 3;
+      dummy.position.set(sP[ix], sP[ix + 1], sP[ix + 2]); dummy.rotation.set(sRot[ix], sRot[ix + 1], sRot[ix + 2]);
+      dummy.scale.setScalar(Math.max(1e-4, sSize[i] * Math.min(1, sLife[i] * 3))); dummy.updateMatrix(); shards.setMatrixAt(i, dummy.matrix);
+    }
+    shards.instanceMatrix.needsUpdate = true;
+  }
+  placeShards();
+
+  // flat glows: a rune circle standing behind S-01, a ripple out of it, a shock ring at the orb
+  const circleTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 512;
+    const g = c.getContext('2d'); g.translate(256, 256); g.strokeStyle = g.fillStyle = '#fff';
+    const ring = (r, w) => { g.lineWidth = w; g.beginPath(); g.arc(0, 0, r, 0, 6.283); g.stroke(); };
+    ring(244, 7); ring(224, 3); ring(152, 4); ring(96, 3);
+    for (const off of [0, Math.PI]) { g.beginPath(); for (let k = 0; k < 3; k++) { const a = off - Math.PI / 2 + k * 2.0944; g[k ? 'lineTo' : 'moveTo'](Math.cos(a) * 152, Math.sin(a) * 152); } g.closePath(); g.stroke(); }
+    for (let k = 0; k < 36; k++) { g.save(); g.rotate(k * Math.PI / 18); g.fillRect(-2, -242, 4, k % 3 ? 8 : 16); g.restore(); }
+    for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; g.beginPath(); g.arc(Math.cos(a) * 188, Math.sin(a) * 188, 15, 0, 6.283); g.stroke(); }
+    const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+  })();
+  const flares = [], pool = { circle: [], ripple: [], shock: [] };
+  function flare(kind, x, y, z, s, color, dur) {
+    let m = pool[kind].find((f) => !f.userData.live);
+    if (!m) {
+      const geo = kind === 'circle' ? new THREE.PlaneGeometry(2, 2) : new THREE.RingGeometry(0.86, 1, 72);
+      m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: kind === 'circle' ? circleTex : null, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
+      m.frustumCulled = false; scene.add(m); pool[kind].push(m);
+    }
+    m.userData.live = true; m.userData.s = s; m.position.set(x, y, z); m.material.color.set(color); m.scale.setScalar(1e-4);
+    flares.push({ m, kind, t: 0, dur });
+  }
+  const ease = (k) => 1 - Math.pow(1 - Math.min(1, k), 3);
+
+  const ERUPT = {
+    fire(o, s, fy, rx) {
+      for (let i = 0; i < n(170); i++) { const [vx, vy, vz] = sphere(rnd(1.4, 4.4) * s); spawn(o.x, o.y, o.z, vx, vy, vz, { decay: rnd(0.9, 1.7), size: rnd(9, 20), drag: 3.4, grav: 1.4 * s }); }
+      for (let i = 0; i < n(110); i++) spawn(rx + rnd(-0.55, 0.55) * s, fy + rnd(0, 0.4) * s, rnd(-0.2, 0.3) * s, rnd(-0.25, 0.25) * s, rnd(0.8, 2.6) * s, 0, { decay: rnd(0.4, 0.8), size: rnd(4, 9), grav: 1.1 * s, drag: 0.4, mix: rnd(0.5, 1) });
+    },
+    water(o, s) {
+      for (let i = 0; i < n(200); i++) { const a = rnd(0, 6.283), sp = rnd(0.5, 1.7) * s; spawn(o.x, o.y, o.z, Math.cos(a) * sp, rnd(2.2, 4.2) * s, Math.sin(a) * sp * 0.5, { decay: rnd(0.5, 0.85), size: rnd(6, 13), grav: -8 * s, mix: rnd(0, 0.7) }); }
+      for (let i = 0; i < n(90); i++) spawn(o.x, o.y - rnd(0, 0.3) * s, o.z, 0, rnd(0.6, 1.4) * s, 0, { decay: rnd(0.7, 1.1), size: rnd(5, 10), helix: { a: rnd(0, 6.283), r: 0.12 * s, w: 8, g: 1.1 * s }, mix: 0.95 });
+    },
+    wind(o, s, fy, rx) {
+      for (let i = 0; i < n(300); i++) spawn(rx, fy + rnd(0, 0.5) * s, 0.1 * s, 0, rnd(0.9, 2.6) * s, 0, { decay: rnd(0.45, 0.8), size: rnd(3, 9), helix: { a: rnd(0, 6.283), r: rnd(0.12, 0.4) * s, w: rnd(6, 11), g: rnd(0.25, 0.6) * s } });
+    },
+    stone(o, s, fy, rx) {
+      shardFloor = fy - 0.55 * s; shardG = 11 * s;
+      for (let i = 0; i < SH; i++) {
+        const ix = i * 3, a = rnd(0, 6.283), sp = rnd(0.6, 2.2) * s;
+        sP[ix] = rx + rnd(-0.1, 0.1) * s; sP[ix + 1] = fy + 0.05 * s; sP[ix + 2] = rnd(-0.1, 0.3) * s;
+        sV[ix] = Math.cos(a) * sp; sV[ix + 1] = rnd(3.5, 6) * s; sV[ix + 2] = Math.sin(a) * sp * 0.4;
+        for (let k = 0; k < 3; k++) { sRot[ix + k] = rnd(0, 6.283); sSpin[ix + k] = rnd(-9, 9); }
+        sLife[i] = 1; sSize[i] = rnd(1, 2.2) * s;
+      }
+      for (let i = 0; i < n(140); i++) { const a = rnd(0, 6.283), sp = rnd(0.6, 2.4) * s; spawn(rx, fy + rnd(0, 0.15) * s, 0, Math.cos(a) * sp, rnd(0.1, 0.9) * s, Math.sin(a) * sp * 0.4, { decay: rnd(0.5, 0.9), size: rnd(10, 22), drag: 2.4, grav: 0.3 * s, mix: rnd(0, 0.5) }); }
+    },
+    healing(o, s, fy, rx) {
+      for (let i = 0; i < n(200); i++) spawn(rx, fy + rnd(0, 0.3) * s, 0.1 * s, 0, rnd(0.35, 1.2) * s, 0, { decay: rnd(0.32, 0.55), size: rnd(5, 12), helix: { a: rnd(0, 6.283), r: rnd(0.35, 0.8) * s, w: rnd(0.8, 2) * (i % 2 ? 1 : -1), g: -0.08 * s } });
+      for (let i = 0; i < n(60); i++) { const [vx, vy, vz] = sphere(rnd(0.4, 1.4) * s); spawn(o.x, o.y, o.z, vx, vy, vz, { decay: rnd(0.8, 1.3), size: rnd(8, 15), drag: 2, mix: 1 }); }
+    },
+  };
+  const ORB = new THREE.Vector3();
+  // `at`: erupt there (a rune) instead of at S-01
+  function erupt(name, at) {
+    const S = SPELLS[name], s = robot.root.scale.x, o = at || robot.orbWorldPosition(ORB);
+    const fy = at ? at.y - 0.9 * s : robot.root.userData.baseY ?? 0, rx = at ? at.x : robot.root.position.x;
+    cA.set(S.color); cB.set(S.hot);
+    // S-01's feet are often behind the page's frames, so ground effects rise from the waist
+    ERUPT[name](o, s, fy + 0.55 * s, rx);
+    flare('circle', rx, fy + 1.05 * s, -0.35 * s, s * 1.15, S.color, 1.7);
+    flare('ripple', rx, fy + 1.05 * s, -0.36 * s, s * 2.2, S.hot, 0.9);
+    flare('shock', o.x, o.y, o.z, s * 1.1, S.hot, 0.55);
+    uniforms.uSpell.value.set(S.color); st.spellAmt = 1;
+    fxLeft = 3.5;
+    robot.state.cheer = 1; setTimeout(() => { robot.state.cheer = 0; }, 700);
+  }
+  const casts = [];                          // mana bolts in flight: { name, t, p0, p1, p2 }
+  function updateSpells(dt, s) {
+    for (let j = casts.length - 1; j >= 0; j--) {
+      const c = casts[j]; c.t += dt;
+      const k = Math.min(1, c.t / 0.38), u = 1 - k;
+      robot.orbWorldPosition(c.p2);           // the bolt lands where the orb is now
+      const x = u * u * c.p0.x + 2 * u * k * c.p1.x + k * k * c.p2.x, y = u * u * c.p0.y + 2 * u * k * c.p1.y + k * k * c.p2.y, z = u * u * c.p0.z + 2 * u * k * c.p1.z + k * k * c.p2.z;
+      cA.set(SPELLS[c.name].color); cB.set(SPELLS[c.name].hot);
+      for (let i = 0; i < n(9); i++) spawn(x, y, z, rnd(-0.3, 0.3) * s, rnd(-0.3, 0.3) * s, rnd(-0.3, 0.3) * s, { decay: rnd(2, 3.4), size: i ? rnd(4, 9) : 18, mix: rnd(0.4, 1) });
+      fxLeft = Math.max(fxLeft, 1.5);
+      if (k >= 1) { casts.splice(j, 1); erupt(c.name); }
+    }
+    for (let j = flares.length - 1; j >= 0; j--) {
+      const f = flares[j], m = f.m, fs = m.userData.s; f.t += dt;
+      const k = f.t / f.dur;
+      if (k >= 1) { m.material.opacity = 0; m.userData.live = false; flares.splice(j, 1); continue; }
+      if (f.kind === 'circle') { m.scale.setScalar(fs * ease(f.t / 0.35)); m.rotation.z += dt * 1.4; m.material.opacity = Math.min(1, f.t / 0.08) * (1 - Math.max(0, (k - 0.55) / 0.45)); }
+      else if (f.kind === 'ripple') { m.scale.setScalar(fs * (0.15 + 0.85 * ease(k))); m.material.opacity = (1 - k) * 0.9; }
+      else { m.scale.setScalar(fs * (0.1 + 0.9 * ease(k))); m.material.opacity = (1 - k) * (1 - k); }
+    }
+    if (fxLeft <= 0) return;
+    fxLeft -= dt;
+    for (let i = 0; i < N; i++) {
+      if (pLife[i] <= 0) continue;
+      const ix = i * 3;
+      pVel[ix + 1] += pGrav[i] * dt;
+      if (hW[i]) {
+        hA[i] += hW[i] * dt; hR[i] += hG[i] * dt;
+        pPos[ix] = hX[i] + Math.cos(hA[i]) * hR[i]; pPos[ix + 1] += pVel[ix + 1] * dt; pPos[ix + 2] = hZ[i] + Math.sin(hA[i]) * hR[i];
+      } else {
+        const d = Math.exp(-pDrag[i] * dt);
+        pVel[ix] *= d; pVel[ix + 1] *= d; pVel[ix + 2] *= d;
+        pPos[ix] += pVel[ix] * dt; pPos[ix + 1] += pVel[ix + 1] * dt; pPos[ix + 2] += pVel[ix + 2] * dt;
+      }
+      pLife[i] = Math.max(0, pLife[i] - pDecay[i] * dt);
+    }
+    for (const a of ['position', 'tint', 'life', 'size']) pGeo.attributes[a].needsUpdate = true;
+    pMat.uniforms.uScale.value = s * renderer.getPixelRatio();   // gl_PointSize is in device pixels
+    let shardsUp = false;
+    for (let i = 0; i < SH; i++) {
+      if (sLife[i] <= 0) continue;
+      const ix = i * 3; shardsUp = true;
+      sV[ix + 1] -= shardG * dt;
+      for (let k = 0; k < 3; k++) { sP[ix + k] += sV[ix + k] * dt; sRot[ix + k] += sSpin[ix + k] * dt; }
+      if (sP[ix + 1] < shardFloor) { sP[ix + 1] = shardFloor; sV[ix + 1] *= -0.35; sV[ix] *= 0.6; sV[ix + 2] *= 0.6; for (let k = 0; k < 3; k++) sSpin[ix + k] *= 0.6; }
+      sLife[i] = Math.max(0, sLife[i] - dt * 0.45);
+    }
+    if (shardsUp) placeShards();
+  }
 
   // ---------------------------------------------------------------- state
   const st = {
@@ -396,22 +549,8 @@ export function createWorld({ bgCanvas, fgCanvas, mobile, calm }) {
       });
     }
 
-    // spell particles
-    if (spell) {
-      spellT += dt;
-      const S = SPELLS[spell];
-      for (let i = 0; i < N; i++) {
-        if (pLife[i] <= 0) continue;
-        const ix = i * 3;
-        if (S.swirl) { const x = pVel[ix], z = pVel[ix + 2]; pVel[ix] = x * Math.cos(S.swirl * dt) - z * Math.sin(S.swirl * dt); pVel[ix + 2] = x * Math.sin(S.swirl * dt) + z * Math.cos(S.swirl * dt); }
-        pVel[ix + 1] += S.gravity * dt;
-        pPos[ix] += pVel[ix] * dt; pPos[ix + 1] += pVel[ix + 1] * dt; pPos[ix + 2] += pVel[ix + 2] * dt;
-        pLife[i] = Math.max(0, pLife[i] - dt * (0.55 + (i % 7) * 0.05));
-      }
-      pGeo.attributes.position.needsUpdate = true; pGeo.attributes.life.needsUpdate = true;
-      pMat.uniforms.uScale.value = scale;
-      if (spellT > 3.5) spell = null;
-    }
+    // spells
+    if (casts.length || flares.length || fxLeft > 0) updateSpells(dt, scale);
 
     renderer.render(scene, camera);
   }
@@ -423,23 +562,23 @@ export function createWorld({ bgCanvas, fgCanvas, mobile, calm }) {
     setMouse(x, y) { st.mouse.set(x, y); },
     setScroll(n) { st.scrollN = n; },
     flash(amount = 1) { st.flash = Math.max(st.flash, amount); },
-    castSpell(name) {
+    // `from` is the clicked rune's centre in client pixels: the bolt starts there; `here` bursts the spell at the rune
+    // instead (S-01 is hidden behind the page). Reduced motion: colour only.
+    castSpell(name, from, here = false) {
       const S = SPELLS[name]; if (!S) return;
-      spell = name; spellT = 0;
-      pMat.uniforms.uColor.value.set(S.color);
-      uniforms.uSpell.value.set(S.color); st.spellAmt = 1;
-      const origin = robot.orbWorldPosition(new THREE.Vector3());
-      const sc = robot.root.scale.x;
-      for (let i = 0; i < N; i++) {
-        const ix = i * 3;
-        pPos[ix] = origin.x; pPos[ix + 1] = origin.y; pPos[ix + 2] = origin.z;
-        const a = Math.random() * Math.PI * 2, u = Math.random() * 2 - 1, sp = (0.5 + Math.random()) * S.spread * sc;
-        const r = Math.sqrt(1 - u * u);
-        pVel[ix] = Math.cos(a) * r * sp; pVel[ix + 1] = (u * 0.6 + S.rise * 0.5) * sp; pVel[ix + 2] = Math.sin(a) * r * sp;
-        pLife[i] = 0.6 + Math.random() * 0.4; pSize[i] = 6 + Math.random() * 10;
-      }
-      pGeo.attributes.size.needsUpdate = true;
-      robot.state.cheer = 1; setTimeout(() => { robot.state.cheer = 0; }, 700);
+      if (calm) { uniforms.uSpell.value.set(S.color); st.spellAmt = 1; return; }
+      if (!from) { erupt(name); return; }
+      const hh = halfH();
+      const p0 = new THREE.Vector3((from.x / st.size[0] * 2 - 1) * hh * camera.aspect, (1 - from.y / st.size[1] * 2) * hh, 0);
+      const p2 = robot.orbWorldPosition(new THREE.Vector3());
+      const p1 = p0.clone().add(p2).multiplyScalar(0.5).add(new THREE.Vector3(0, p0.distanceTo(p2) * 0.35, 1));
+      if (here) erupt(name, p0); else casts.push({ name, t: 0, p0, p1, p2 });
+    },
+    // screen position of the orb, or null when S-01 is not shown
+    orbScreen() {
+      if (!robot.root.visible) return null;
+      const v = robot.orbWorldPosition(new THREE.Vector3()).project(camera);
+      return { x: (v.x + 1) / 2 * st.size[0], y: (1 - v.y) / 2 * st.size[1] };
     },
     // screen-space position of the robot's head, for the speech bubble
     headScreen() {

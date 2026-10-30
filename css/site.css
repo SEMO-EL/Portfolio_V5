@@ -370,6 +370,13 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 .rune:hover, .rune:focus-visible { transform: translateY(-4px) rotate(-3deg); box-shadow: inset 0 0 0 2px #ffd36b, inset 0 0 0 6px rgba(36, 17, 47, 0.8), inset 0 0 0 7px rgba(255, 211, 107, 0.7), 0 0 40px 2px var(--rc); }
 .rune.cast { animation: cast 600ms var(--ease-out); }
 @keyframes cast { 30% { transform: scale(1.14); } }
+.rune { position: relative; }
+.rune.cast svg { animation: rune-flare 600ms ease-out; }
+@keyframes rune-flare { 25% { transform: scale(1.25); filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 22px var(--rc)) brightness(1.8); } }
+.rune-seal { position: absolute; inset: -12px; border-radius: 50%; border: 2px dashed var(--rc); box-shadow: 0 0 18px var(--rc), inset 0 0 18px var(--rc); pointer-events: none; animation: seal 900ms var(--ease-out) forwards; }
+.rune-seal::after { content: ""; position: absolute; inset: 10px; border-radius: 50%; border: 1px solid #ffe7a8; animation: seal-in 600ms var(--ease-out) forwards; }
+@keyframes seal { from { transform: scale(0.7) rotate(0deg); opacity: 1; } to { transform: scale(1.9) rotate(140deg); opacity: 0; } }
+@keyframes seal-in { from { transform: scale(1.4); opacity: 0.9; } to { transform: scale(0.6); opacity: 0; } }
 .scrolls { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; margin-top: 80px; max-width: 1400px; }
 .scroll-frame { position: relative; align-self: start; padding: 10px; background: linear-gradient(145deg, #3a2150, #1a0e2c); border-radius: 6px; box-shadow: 0 0 0 2px #d6a82e, 0 0 0 6px #1a0e2c, 0 0 0 7px rgba(214, 168, 46, 0.6), 0 30px 60px -20px rgba(0, 0, 0, 0.6); }
 .scroll-frame::before, .scroll-frame::after { content: ""; position: absolute; width: 26px; height: 26px; border: 3px solid #ffd36b; z-index: 2; pointer-events: none; }
