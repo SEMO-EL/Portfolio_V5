@@ -6,6 +6,7 @@
    ========================================================================== */
 import { createWorld } from './world.js';
 import { createSound } from './sound.js';
+import { initPlanner } from './planner.js';
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
@@ -37,7 +38,7 @@ boot.setAttribute('aria-hidden', 'true');
 boot.innerHTML = '<div class="boot-ring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" stroke-width="3"/><path d="M41.5 21.5a10 10 0 1 0-9.5 10.5a10 10 0 1 1-9.5 10.5" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div><p class="boot-title">S-01 booting</p><ol class="boot-log"></ol><div class="boot-bar"><i></i></div>';
 if (world && !calm) document.body.appendChild(boot);
 const bootLog = boot.querySelector('.boot-log');
-const bootLines = ['Loading seven worlds', 'Polishing armour plates', 'Calibrating visor', 'Finding Casablanca', 'Ready'];
+const bootLines = ['Loading eight worlds', 'Polishing armour plates', 'Calibrating visor', 'Finding Casablanca', 'Ready'];
 let bootStep = 0;
 const bootTick = setInterval(() => {
   if (bootStep >= bootLines.length) return;
@@ -90,6 +91,8 @@ document.addEventListener('click', (e) => {
   if (!el) return;
   e.preventDefault();
   closeMap();
+  const sheet = openSheet();                    // a link inside a dossier closes it first, then travels
+  if (sheet) closeProject(sheet, { restoreFocus: false });
   scrollToEl(el);
   history.replaceState(null, '', '#' + id);
 });
@@ -101,12 +104,13 @@ const CHAPTERS = {
   simoai: { label: 'Glass lab', accent: '#28ffd2', light: false, line: 'Six models, one 16 GB card. We take turns.' },
   ironline: { label: 'Night arena', accent: '#ff4b1f', light: false, line: 'The rules run 128 times a second. I counted.' },
   mana: { label: 'Twilight valley', accent: '#ffd36b', light: false, line: 'Pick a rune and I’ll cast it.' },
+  roboroute: { label: 'Game table', accent: '#2dd4bf', light: false, line: 'Robot games. This is my kind of table.' },
   shipped: { label: 'Concrete', accent: '#dd614c', light: true, line: 'Everything here is live. Go and click something.' },
   studio: { label: 'Paper and ink', accent: '#2547d0', light: true, line: 'Every frame of those films was drawn by code.' },
   method: { label: 'Editorial', accent: '#e9e4d8', light: false, line: '' },
   contact: { label: 'Back to space', accent: '#6ee7ff', light: false, line: 'Say hi to Simo for me.' },
 };
-const LINES = { "start": [ "Hi! I’m S-01. Simo built my body for Ironline. Click me any time.", "Scroll down. I’ll walk.", "I have a halo here. Only here.", "Seven worlds. I’ve been to all of them." ], "origins": [ "This is where it started. Watch your step.", "Hit the blocks. They pay out.", "A Mario-style platformer in 2020. Very brave.", "Panama, then Houston. Not bad for a robot kid." ], "simoai": [ "Six models, one 16 GB card. We take turns.", "Pick a request. Watch it plan.", "The kitten was made on Simo’s GPU. No cloud.", "I asked for a circle once. Long story." ], "ironline": [ "The rules run 128 times a second. I counted.", "Shoot the bots, not me.", "Every rule here has a test. 290 of them.", "Aim for the visor." ], "mana": [ "Pick a rune and I’ll cast it.", "Three chapters so far. I’m in none of them.", "The Demon Continent is very red.", "Fire is the classic. Try healing." ], "shipped": [ "Everything here is live. Go and click something.", "Two colourways sold out. True story.", "Built in a day. Some of them.", "Concrete suits me." ], "studio": [ "Every frame of those films was drawn by code.", "Click the paper. Make a mess.", "The PoseSandbox film has a voice. Turn it on.", "I get a new paint job here." ], "method": [ "Read this one slowly." ], "contact": [ "Say hi to Simo for me.", "The email button works. I checked.", "Thanks for walking with me.", "Want to go again? Scroll up." ] };
+const LINES = { "start": [ "Hi! I’m S-01. Simo built my body for Ironline. Click me any time.", "Scroll down. I’ll walk.", "I have a halo here. Only here.", "Eight worlds. I’ve been to all of them." ], "origins": [ "This is where it started. Watch your step.", "Hit the blocks. They pay out.", "A Mario-style platformer in 2020. Very brave.", "Panama, then Houston. Not bad for a robot kid." ], "simoai": [ "Six models, one 16 GB card. We take turns.", "Pick a request. Watch it plan.", "The kitten was made on Simo’s GPU. No cloud.", "I asked for a circle once. Long story." ], "ironline": [ "The rules run 128 times a second. I counted.", "Shoot the bots, not me.", "Every rule here has a test. 290 of them.", "Aim for the visor." ], "mana": [ "Pick a rune and I’ll cast it.", "Three chapters so far. I’m in none of them.", "The Demon Continent is very red.", "Fire is the classic. Try healing." ], "roboroute": [ "Robot games. This is my kind of table.", "Pick a mission. Watch the search spread.", "A* heads for the goal. Dijkstra looks everywhere.", "The real one runs Python inside your browser tab.", "I’m about 14 centimetres too tall for this table." ], "shipped": [ "Everything here is live. Go and click something.", "Two colourways sold out. True story.", "Built in a day. Some of them.", "Concrete suits me." ], "studio": [ "Every frame of those films was drawn by code.", "Click the paper. Make a mess.", "The PoseSandbox film has a voice. Turn it on.", "I get a new paint job here." ], "method": [ "Read this one slowly." ], "contact": [ "Say hi to Simo for me.", "The email button works. I checked.", "Thanks for walking with me.", "Want to go again? Scroll up." ] };
 const lineAt = {};
 function nextLine(id) { const L = LINES[id] || LINES.start; const i = (lineAt[id] = ((lineAt[id] ?? -1) + 1) % L.length); return L[i]; }
 const parsePose = (s) => { const [x, y, h, rot] = (s || '0,-2,0.3,0').split(',').map(Number); return { x, y, h, rot }; };
@@ -177,7 +181,7 @@ function placeBubble() {
   bubble.style.setProperty('--bx', `${x}px`);
   bubble.style.setProperty('--by', `${y}px`);
 }
-const INTERACTIVE = 'a, button, input, select, textarea, iframe, video, dialog, .screen, .slice, .rune, .station, [data-open], .ev-card, .glass-panel';
+const INTERACTIVE = 'a, button, input, select, textarea, iframe, video, dialog, .screen, .slice, .rune, .station, [data-open], .ev-card, .glass-panel, .field-panel';
 document.addEventListener('click', (e) => {
   if (!world || e.target.closest(INTERACTIVE)) return;
   if (world.hitRobot(e.clientX, e.clientY)) {
@@ -228,6 +232,7 @@ if (hasGsap && !calm) {
   const reveal = (sel, opts = {}) => $$(sel).forEach((el) => gsap.from(el, { y: 40, opacity: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true }, ...opts }));
   reveal('.glass-head > *, .router, .g-shot, .gpu, .bugs-title');
   reveal('.fantasy-head > *, .runes, .scroll-frame');
+  reveal('.field-head > *, .planner, .field-step, .field-film > *');
   reveal('.brutal-lead, .slices', { y: 60 });
   reveal('.studio-title, .studio-lead, .sia-film, .sia-text, .print, .machine > *');
   reveal('.ev-card');
@@ -484,6 +489,27 @@ $$('.rune').forEach((rune) => rune.addEventListener('click', () => {
   sound.fx('spell_' + spell);
   say(SPELL_LINES[spell], 2200);
 }));
+
+/* ------------------------------------------------------------------ ROBOROUTE: plan a route on the table */
+const plannerEl = $('#planner');
+let routesPlanned = 0;
+if (plannerEl) initPlanner({
+  root: plannerEl, calm, sound,
+  onRoute: (result, goal) => {
+    world?.robot.hop(2.2);
+    routesPlanned += 1;
+    // the first route plans itself; S-01 only comments on the ones the visitor asked for
+    if (routesPlanned === 2) say('Same grid cells the real engine checks.', 2400);
+    else if (routesPlanned > 2 && goal.id === 'home') say('Home zone. Time to swap attachments.', 2200);
+  },
+});
+// the launch film plays with its music on request, like the PoseSandbox one
+const rrFilm = $('#rrFilm'), rrPlay = $('#rrPlay');
+if (rrFilm && rrPlay) {
+  rrPlay.addEventListener('click', () => { rrFilm.muted = false; rrFilm.controls = true; rrFilm.play().catch(() => {}); rrPlay.hidden = true; world?.robot.hop(2.4); });
+  rrFilm.addEventListener('ended', () => { rrFilm.controls = false; rrPlay.hidden = false; });
+  if ('IntersectionObserver' in window) new IntersectionObserver((en) => en.forEach((e) => { if (!e.isIntersecting && !rrFilm.paused) rrFilm.pause(); }), { threshold: 0.2 }).observe(rrFilm);
+}
 
 /* ------------------------------------------------------------------ SHIPPED: brutal accordion */
 const slices = $$('.slice');

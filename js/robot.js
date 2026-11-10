@@ -39,7 +39,7 @@ export const LOOKS = {
   concrete:  { body: '#232323', bodyRough: 0.9, plates: '#bdb8ae', rough: 1, metal: 0, clear: 0, trans: 0, visor: '#f4f4f4', glow: 0.5, halo: 0, orb: 0, puff: 1 },
   studio:    { body: '#1d1d1f', bodyRough: 0.6, plates: ['#2547d0', '#f5b301', '#e63946', '#2a9d8f', '#ff7bac', '#2547d0', '#f5b301', '#e63946', '#2a9d8f', '#ff7bac', '#2547d0'], rough: 0.55, metal: 0, clear: 0.3, trans: 0, visor: '#ffffff', glow: 1.2, halo: 0, orb: 0, puff: 1.04 },
   editorial: { body: '#202124', bodyRough: 0.6, plates: '#ece6d8', rough: 0.4, metal: 0.1, clear: 0.5, trans: 0, visor: '#6ee7ff', glow: 1.4, halo: 0, orb: 0, puff: 1 },
-  void:      { body: '#1c2333', bodyRough: 0.5, plates: '#e9eefb', rough: 0.22, metal: 0.35, clear: 1, trans: 0, visor: '#6ee7ff', glow: 2.4, halo: 1, orb: 0, puff: 1 },
+  field:     { body: '#111a2e', bodyRough: 0.5, plates: ['#2dd4bf', '#e2e8f0', '#e2e8f0', '#e2e8f0', '#e2e8f0', '#fbbf24', '#fbbf24', '#e2e8f0', '#e2e8f0', '#2dd4bf', '#2dd4bf'], rough: 0.38, metal: 0.05, clear: 0.7, trans: 0, visor: '#2dd4bf', glow: 2.6, halo: 0, orb: 0, puff: 1 },
 };
 const PLATE_COUNT = 11;
 const toColor = (hex) => new THREE.Color(hex);

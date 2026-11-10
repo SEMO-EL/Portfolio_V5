@@ -1,4 +1,4 @@
-# Simo: seven worlds (portfolio v5)
+# Simo: eight worlds (portfolio v5)
 
 A scroll-through portfolio. Each chapter is its own world in its own style, and a small robot,
 S-01, rebuilt in code from Simo's Ironline agents, walks through all of them. One WebGL
@@ -6,7 +6,7 @@ background blends each world into the next as you scroll.
 
 A short boot screen covers the first second while fonts load. The Sound button in the HUD turns on
 synthesised sound (no audio files): a quiet bed per world that crossfades with the visuals, and
-effects for shots, coins, spells and ink. It is off until the visitor turns it on.
+effects for shots, coins, spells, route planning and ink. It is off until the visitor turns it on.
 
 | Chapter | World | Interaction |
 | --- | --- | --- |
@@ -14,7 +14,8 @@ effects for shots, coins, spells and ink. It is off until the visitor turns it o
 | Where it started | Clay | pinned horizontal platformer; the robot walks it; blocks pop coins |
 | SimoAI | Glass lab | pick a request and watch the router split it into tasks; the GPU queue machine |
 | Ironline | Night arena (dramatic) | letterboxed scroll through four screens; target practice: bots pop up, hits score up to x5 combos, Enter fires |
-| Mana Vessel | Twilight valley (fantasy) | five rune buttons cast spells into the 3D scene; six framed screens from all three chapters and the new heroes |
+| Mana Vessel | Twilight valley (fantasy) | five rune buttons cast spells into the 3D scene; six framed screens: the cast, Kestrel the horse, the great hall, the chapel, a spell and the Demon Continent |
+| RoboRoute | Game table (blueprint) | a live route planner: pick a mission or click the table, watch A* or Dijkstra search, the robot drives the route; the launch film with its music |
 | Shipped | Concrete (brutalist) | accordion of seven live sites and tools |
 | Studio | Paper and ink (artistic) | click to splash ink (the robot reacts); the PoseSandbox launch film with sound; SIA film loop; the open differential |
 | How I work | Editorial | words light up as you read; three pieces of evidence |
@@ -28,9 +29,10 @@ css/site.css      every world's styles, the HUD, dossiers, phone layout, reduced
 js/main.js        scroll, world blending, robot moves, every chapter's interaction, dossiers, viewer
 js/world.js       the WebGL background (all worlds in one shader) and the robot/props layer
 js/robot.js       S-01, built from primitives, with one material look per world
+js/planner.js     the RoboRoute route planner: a JavaScript port of the app's search (grid, A*/Dijkstra, smoothing, timing)
 js/sound.js       the synthesised sound beds and effects (Web Audio)
 vendor/           three.js r170, GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.13 (local copies, no CDN)
-images/           screenshots (.webp), thumbnails in images/t/, the SIA, SimoAI and PoseSandbox clips
+images/           screenshots (.webp), thumbnails in images/t/, the SIA, SimoAI, PoseSandbox and RoboRoute clips
 explainers/       the two live figures (GPU queue, open differential)
 ```
 
@@ -44,7 +46,7 @@ and regenerate.
 ## Editing
 
 - Text and structure: `Downloads\Humble_Portfolio_src\page-v5.html` (chapters) and `projects.mjs`
-  (the 13 project dossiers and their screens). Then run `node gen-v5.mjs` there. Hand edits to
+  (the 14 project dossiers and their screens). Then run `node gen-v5.mjs` there. Hand edits to
   `index.html` work too, but regenerating overwrites them.
 - Robot position per chapter: `data-robot="x,y,height,turn"` on each section (x and y from -1 to 1
   across the screen, y is where its feet stand, height is a fraction of the screen height);
@@ -63,6 +65,7 @@ error; `node ratio.mjs 1440 900` lists stretched images; `node look.mjs 1440 900
 - Reduced motion: no smooth scrolling, no pinned or scrubbed sections, no autoplay; everything
   is shown at its end state.
 - Looping clips stop by themselves after five seconds; pointing at one plays it again.
+- The route planner shows its finished route at once under reduced motion, every mission is a real button, and without JavaScript the planner is hidden.
 - No boot screen and no bots under reduced motion; the boot screen is never shown without JavaScript.
 - The sound is off by default and only starts after a click on the Sound button.
 - Without WebGL or JavaScript each chapter keeps a flat background and all content and links work.

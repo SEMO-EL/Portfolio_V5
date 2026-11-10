@@ -1,4 +1,4 @@
-// Sound for the seven worlds, all synthesised (no audio files). Off until the visitor turns it on.
+// Sound for the eight worlds, all synthesised (no audio files). Off until the visitor turns it on.
 // Each world has a quiet ambient bed; beds crossfade with the same weights as the visuals.
 const BEDS = {
   //            notes (Hz)                     wave        cutoff  level  lfo   noise
@@ -10,7 +10,7 @@ const BEDS = {
   concrete:  { notes: [49, 98],                   type: 'sine',     cut: 300,  lvl: 0.10, lfo: 0.0, noise: 0.25 },
   studio:    { notes: [174.6, 220, 261.6, 329.6], type: 'triangle', cut: 1800, lvl: 0.08, lfo: 0.3, noise: 0 },
   editorial: { notes: [98, 146.8],                type: 'sine',     cut: 700,  lvl: 0.06, lfo: 0.05, noise: 0 },
-  void:      { notes: [55, 110],                  type: 'sine',     cut: 400,  lvl: 0.05, lfo: 0.03, noise: 0 },
+  field:     { notes: [110, 164.8, 220, 329.6],   type: 'triangle', cut: 1000, lvl: 0.08, lfo: 0.22, noise: 0 },
 };
 
 export function createSound() {
@@ -81,6 +81,10 @@ export function createSound() {
     spell_wind: () => { FX.charge(); noise(1.2, 300, 3000, 0.6, 'bandpass', 0.3); noise(1.0, 2500, 400, 0.35, 'bandpass', 0.8); },
     spell_stone: () => { FX.charge(); tone(80, 32, 0.5, 'sine', 0.45, 0.38); noise(0.35, 1400, 150, 0.7, 'lowpass', 0.38); for (let i = 0; i < 6; i++) tone(220 + Math.random() * 120, 120, 0.05, 'triangle', 0.08, 0.7 + i * 0.12 + Math.random() * 0.06); },
     spell_healing: () => { FX.charge(); [784, 988, 1175, 1568, 1976].forEach((f, i) => tone(f, f, 0.7, 'sine', 0.05, 0.38 + i * 0.08)); tone(392, 784, 1.0, 'triangle', 0.03, 0.38); },
+    // the planner: a rising tick while the search spreads, then a three-note 'route found'
+    scan: () => { for (let i = 0; i < 9; i++) tone(520 + i * 70, 520 + i * 70, 0.03, 'square', 0.025, i * 0.07); },
+    route: () => { [659, 880, 1319].forEach((f, i) => tone(f, f, 0.16, 'triangle', 0.07, i * 0.09)); },
+    blocked: () => { tone(220, 150, 0.18, 'sawtooth', 0.05); },
     splat: () => { noise(0.18, 900, 200, 0.5, 'lowpass'); },
     hop: () => { tone(300, 600, 0.12, 'sine', 0.06); },
   };

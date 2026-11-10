@@ -3,7 +3,7 @@
 import * as THREE from '../vendor/three.module.min.js';
 import { createRobot } from './robot.js';
 
-export const WORLDS = ['cosmic', 'clay', 'glass', 'arena', 'fantasy', 'concrete', 'studio', 'editorial', 'void'];
+export const WORLDS = ['cosmic', 'clay', 'glass', 'arena', 'fantasy', 'concrete', 'studio', 'editorial', 'field'];
 
 // ------------------------------------------------------------------ background shader
 const BG_FRAG = /* glsl */ `
@@ -125,9 +125,24 @@ vec3 editorial(vec2 p) {
   col += (hash(p * uRes.y + floor(uTime * 24.0)) - 0.5) * 0.045;
   return col;
 }
-vec3 voidW(vec2 p) {
-  vec3 col = vec3(0.0);
-  col += vec3(starField(p + vec2(0.0, uScroll * 0.01), 40.0, 0.04, 21.0)) * 0.6;
+// the game table: a planning grid that scrolls with the page, with a search front sweeping its cells
+vec3 field(vec2 p) {
+  vec3 col = mix(hex(8.0, 13.0, 27.0), hex(13.0, 25.0, 46.0), smoothstep(-0.8, 0.8, p.y));
+  vec2 q = vec2(p.x * 9.0, p.y * 9.0 - uScroll * 9.0);
+  vec2 g = abs(fract(q) - 0.5);
+  float fine = smoothstep(0.476, 0.5, max(g.x, g.y));
+  vec2 g5 = abs(fract(q / 5.0) - 0.5);
+  float major = smoothstep(0.495, 0.5, max(g5.x, g5.y));
+  col += hex(40.0, 62.0, 104.0) * fine * 0.2 + hex(45.0, 212.0, 191.0) * major * 0.085;
+  vec2 id = floor(q);
+  vec2 dd = abs(id - vec2(-7.0, -3.0 - floor(uScroll * 9.0)));
+  float dist = max(dd.x, dd.y) + 0.414 * min(dd.x, dd.y);
+  float front = fract(dist * 0.05 - uTime * 0.085);
+  float lit = smoothstep(0.16, 0.0, front) * (0.35 + 0.65 * hash(id));
+  float cell = smoothstep(0.5, 0.4, max(g.x, g.y));
+  col += hex(45.0, 212.0, 191.0) * lit * cell * 0.085;
+  col += hex(45.0, 212.0, 191.0) * 0.05 * smoothstep(1.3, 0.0, length(p - vec2(0.6, -0.15)));
+  col *= 1.0 - 0.32 * dot(p * 0.62, p * 0.62);
   return col;
 }
 
@@ -142,7 +157,7 @@ void main() {
   if (uW[5] > 0.002) col += uW[5] * concrete(p);
   if (uW[6] > 0.002) col += uW[6] * studio(p);
   if (uW[7] > 0.002) col += uW[7] * editorial(p);
-  if (uW[8] > 0.002) col += uW[8] * voidW(p);
+  if (uW[8] > 0.002) col += uW[8] * field(p);
   col += uSpell * uSpellAmt * 0.35 * smoothstep(1.4, 0.0, length(p - vec2(0.45, -0.1)));
   col += vec3(1.0, 0.85, 0.7) * uFlash * 0.5;
   gl_FragColor = vec4(col, 1.0);
@@ -160,7 +175,7 @@ const LIGHT = {
   concrete:  { sky: '#ffffff', ground: '#9a958c', hemi: 1.6, key: '#ffffff', keyI: 1.8, rim: '#ffffff', rimI: 0.6 },
   studio:    { sky: '#ffffff', ground: '#f3e3c0', hemi: 1.7, key: '#fffaf0', keyI: 2.0, rim: '#2547d0', rimI: 0.8 },
   editorial: { sky: '#d8e8e8', ground: '#141414', hemi: 0.9, key: '#ffffff', keyI: 1.8, rim: '#6ee7ff', rimI: 1.2 },
-  void:      { sky: '#9fb8ff', ground: '#000000', hemi: 0.8, key: '#ffffff', keyI: 1.8, rim: '#6ee7ff', rimI: 2.0 },
+  field:     { sky: '#cfe6ff', ground: '#0b1120', hemi: 1.1, key: '#ffffff', keyI: 2.1, rim: '#2dd4bf', rimI: 2.6 },
 };
 // each school's particles mix from `color` to `hot`; how each one erupts is ERUPT in createWorld
 const SPELLS = {
@@ -279,6 +294,22 @@ export function createWorld({ bgCanvas, fgCanvas, mobile, calm }) {
       const drop = new THREE.Mesh(new THREE.SphereGeometry(s, 32, 24), phys({ color: c, roughness: 0.25, clearcoat: 1, clearcoatRoughness: 0.1 }));
       drop.scale.set(1.2, 0.85, 1); drop.position.set(x, y, z); drop.userData.bob = 1 + s * 3; drop.userData.spin = [0, 0.4, 0]; g.add(drop);
     }
+  }
+  // field: what sits on a robot-game table: a keep-out block, a mission model, a waypoint and the home ring
+  {
+    const g = makeGroup('field');
+    const blk = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.3, 0.3), std({ color: '#334155', roughness: 0.7, metalness: 0.1 }));
+    blk.add(new THREE.LineSegments(new THREE.EdgesGeometry(blk.geometry), new THREE.LineBasicMaterial({ color: '#8fa3bf' })));
+    blk.position.set(-0.82, 2.42, -0.6); blk.rotation.set(0.25, 0.5, 0.1); blk.userData.bob = 0.8; blk.userData.spin = [0, 0.25, 0]; g.add(blk);
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.3, 4), std({ color: '#fbbf24', roughness: 0.35, emissive: '#b97a06', emissiveIntensity: 0.7, flatShading: true }));
+    cone.position.set(0.62, 2.62, -0.5); cone.userData.bob = 1.2; cone.userData.spin = [0, 0.9, 0]; g.add(cone);
+    const way = new THREE.Mesh(new THREE.OctahedronGeometry(0.1, 0), std({ color: '#2dd4bf', roughness: 0.2, emissive: '#2dd4bf', emissiveIntensity: 1.2, flatShading: true }));
+    way.position.set(0.86, 1.72, 0.1); way.userData.bob = 1.6; way.userData.spin = [0, 1.1, 0]; g.add(way);
+    const home = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.012, 8, 4), std({ color: '#0b1120', emissive: '#2dd4bf', emissiveIntensity: 2.2 }));
+    home.position.set(0, 0.02, 0); home.rotation.set(Math.PI / 2, 0, Math.PI / 4); g.add(home);
+    const rock = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.12, 28), std({ color: '#475569', roughness: 0.6 }));
+    rock.add(new THREE.LineSegments(new THREE.EdgesGeometry(rock.geometry, 30), new THREE.LineBasicMaterial({ color: '#8fa3bf' })));
+    rock.position.set(-0.92, 0.62, 0.25); rock.rotation.set(0.5, 0, 0.2); rock.userData.bob = 1.4; g.add(rock);
   }
   Object.values(propGroups).forEach((g) => g.children.forEach((c) => { c.userData.home = c.position.clone(); c.userData.phase = Math.random() * 6.28; }));
 
