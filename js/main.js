@@ -144,6 +144,7 @@ function blendNow() {
 
 function setChapter(sec) {
   if (current === sec.id) return;
+  if (current !== null) hideBubble();
   current = sec.id;
   const ch = CHAPTERS[sec.id] || CHAPTERS.start;
   worldName.textContent = ch.label;
@@ -162,21 +163,45 @@ window.addEventListener('pointermove', (e) => {
 }, { passive: true });
 
 const bubble = $('#bubble');
+const heroTitle = $('#start-h');
+const heroCopy = $('.start-copy');
+const greetingScrollLimit = 24;
 let bubbleTimer = 0;
-function say(text, ms = 3400) {
+let bubbleIsGreeting = false;
+function hideBubble() {
+  clearTimeout(bubbleTimer);
+  bubble.hidden = true;
+  bubbleIsGreeting = false;
+}
+function say(text, ms = 3400, { greeting = false } = {}) {
   if (!world || !text) return;
+  clearTimeout(bubbleTimer);
+  bubbleIsGreeting = greeting;
   bubble.textContent = text;
   bubble.hidden = false;
+  bubbleTimer = setTimeout(hideBubble, ms);
   placeBubble();
-  clearTimeout(bubbleTimer);
-  bubbleTimer = setTimeout(() => { bubble.hidden = true; }, ms);
 }
 function placeBubble() {
   if (bubble.hidden || !world) return;
+  if (bubbleIsGreeting && window.scrollY > greetingScrollLimit) {
+    hideBubble();
+    return;
+  }
   const p = world.headScreen();
   const w = bubble.offsetWidth, h = bubble.offsetHeight;
   const x = Math.min(window.innerWidth - w - 12, Math.max(12, p.x + 26));
-  const y = Math.min(window.innerHeight - h - 12, Math.max(70, p.y - h - 30));
+  let minY = 70;
+  let maxY = window.innerHeight - h - 12;
+  if (bubbleIsGreeting && phoneQ.matches) {
+    minY = Math.max(minY, heroTitle.getBoundingClientRect().bottom + 8);
+    maxY = Math.min(maxY, heroCopy.getBoundingClientRect().top - h - 8);
+    if (maxY < minY) {
+      hideBubble();
+      return;
+    }
+  }
+  const y = Math.min(maxY, Math.max(minY, p.y - h - 30));
   bubble.style.transform = `translate(${x}px, ${y}px)`;
   bubble.style.setProperty('--bx', `${x}px`);
   bubble.style.setProperty('--by', `${y}px`);
@@ -221,7 +246,12 @@ else { const loop = () => { tick(); requestAnimationFrame(loop); }; requestAnima
 
 if (world) {
   // a hello on arrival
-  setTimeout(() => { if (window.scrollY < window.innerHeight * 0.4) { world.robot.wave(2); say(CHAPTERS.start.line, 4200); } }, calm ? 300 : 1400);
+  setTimeout(() => {
+    if (current !== 'start' || window.scrollY > greetingScrollLimit || !bubble.hidden) return;
+    world.robot.wave(2);
+    const greeting = phoneQ.matches ? 'Hi! I’m S-01. Tap me to travel.' : CHAPTERS.start.line;
+    say(greeting, 4200, { greeting: true });
+  }, calm ? 300 : 1400);
 }
 
 /* ------------------------------------------------------------------ entrances */
