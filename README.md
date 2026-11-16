@@ -74,3 +74,17 @@ error; `node ratio.mjs 1440 900` lists stretched images; `node look.mjs 1440 900
 
 Code and design: Claude Code, directed by Simo. Aerial photos of Casablanca, 1930: Walter
 Mittelholzer, ETH-Bibliothek Zürich, public domain.
+
+## Selected projects (the one-minute page)
+
+`selected/index.html` is the short page for reviewers: three projects, who wrote the code of each, and links to
+the evidence. Plain HTML and inline CSS, no JavaScript. It is generated, like the home page:
+
+    node gen-selected.mjs                      (in Downloads\Humble_Portfolio_src; the words that exist only there are in SELECTED)
+    python tools/selected-check.py             checks it with JavaScript off (desktop and phone), every link, the
+                                               first-screen button and dossier scrolling, and prints the page to
+                                               selected/simo-selected-projects.pdf (two US Letter pages)
+    python tools/selected-check.py https://semo-el.github.io/Portfolio_V5      the same checks on the live site
+
+The ArchaeoSmart picture on that page is taken from the live app with the network switched off
+(`python tools/shoot-archaeo-offline.py`).
