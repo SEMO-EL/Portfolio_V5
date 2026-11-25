@@ -312,7 +312,7 @@ $$('.block').forEach((block) => block.addEventListener('click', () => {
 }));
 
 /* ------------------------------------------------------------------ SIMOAI: watch it plan */
-const LANES = { chat: 'Chat', code: 'Code', vision: 'Vision', docs: 'PDF reader', render: 'Exact renderer', video: 'Video', image: 'Image' };
+const LANES = { chat: 'Chat', code: 'Code', vision: 'Vision', docs: 'PDF reader', render: 'Exact renderer', video: 'Video', image: 'Image', web: 'Web search' };
 const REQUESTS = {
   circle: {
     prompt: 'Explain the area of a circle, draw a blue circle with the formula, and animate a dot growing into a circle.',
@@ -331,8 +331,13 @@ const REQUESTS = {
   },
   video: {
     prompt: 'Turn this kitten picture into a short video.',
-    tasks: [['video', 'Wan 2.2', 'Image to video, about two seconds by default']],
+    tasks: [['video', 'Wan 2.2 14B LightX2V', 'Animate the picture in four steps, a two-, three- or five-second clip']],
     note: 'The kitten clip in the glass panel below was made exactly this way, on my RTX 5060 Ti.',
+  },
+  web: {
+    prompt: 'What changed in the latest Ollama release? Give me sources.',
+    tasks: [['web', 'SearXNG + page reader', 'Search, then read up to three public pages'], ['chat', 'Qwen3 14B', 'Answer from those pages with numbered, clickable sources']],
+    note: 'Web mode is Off, Auto or Always. In a saved test a researched answer took 15 seconds, and a plain sum used no sources at all.',
   },
 };
 let routerToken = 0;

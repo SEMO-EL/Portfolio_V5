@@ -288,6 +288,17 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 .sf img { transition: transform 700ms var(--ease-out); }
 @media (hover: hover) and (pointer: fine) { .sf:hover img { transform: scale(1.03); } }
 
+.talk { margin-top: 90px; padding: clamp(18px, 2.5vw, 30px); display: grid; grid-template-columns: 1.25fr 1fr 0.75fr; gap: 20px; align-items: start; max-width: 1400px; }
+.talk h3 { font-family: var(--font-space); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 2rem); color: #fff; }
+.talk-copy > p { color: #c5f1fb; margin-top: 8px; }
+.talk-list { display: grid; gap: 10px; margin-top: 16px; padding: 0; list-style: none; }
+.talk-list li { padding: 10px 14px; border-radius: 14px; background: rgba(255, 255, 255, 0.07); color: #e3fbff; font-size: 0.93rem; }
+.talk-list b { color: #28ffd2; font-weight: 600; }
+.talk-side { display: grid; gap: 16px; }
+.talk figure img { width: 100%; height: auto; border-radius: 14px; }
+.talk figcaption { padding: 10px 4px 0; font-size: 0.88rem; color: #c5f1fb; }
+.talk .talk-robot img { width: min(100%, 240px); image-rendering: pixelated; border-radius: 10px; }
+
 .bugs { margin-top: 90px; max-width: 760px; }
 .bugs-title { font-family: var(--font-space); font-weight: 400; font-size: clamp(1.5rem, 2.6vw, 2.2rem); color: #fff; margin-bottom: 24px; }
 .bug { position: sticky; top: calc(14vh + var(--i, 0) * 26px); padding: 28px 30px; margin-bottom: 26vh; transform-origin: center top; }
@@ -661,13 +672,23 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 .v-close { margin-left: 10px; background: #fff !important; color: #06070c !important; }
 
 /* the robot keeps the right-hand quarter of the glass lab on wide screens */
-@media (min-width: 1101px) { .glass-grid, .gpu { max-width: min(1400px, 74vw); } }
+@media (min-width: 1101px) { .glass-grid, .gpu, .talk { max-width: min(1400px, 74vw); } }
+/* short laptop screens (1440x900): smaller title with the tagline beside it, so the Ironline screen gets the height (letterboxes cover 9vh top and bottom) */
+@media (min-width: 1101px) and (max-height: 1000px) {
+  .arena-pin { grid-template-columns: auto 1fr; grid-template-rows: auto 1fr auto auto; }
+  .arena-pin > * { grid-column: 1 / -1; }
+  .arena-title { grid-column: 1; font-size: clamp(3.6rem, 1rem + min(11vw, 13vh), 13rem); }
+  .arena-tag { grid-column: 2; grid-row: 1; align-self: end; margin: 0 0 0 40px; }
+  .screen { width: min(58vw, 1040px, calc((100svh - 410px) * 1.6)); }
+}
 
 /* ================================================================== TABLET */
 @media (max-width: 1100px) {
   .glass-grid { grid-template-columns: 1.6fr 1fr; }
   .g-phone { display: none; }
   .gpu { grid-template-columns: 1fr; }
+  .talk { grid-template-columns: 1fr 1fr; }
+  .talk-copy { grid-column: 1 / -1; }
   .arena-more { padding-left: var(--m); grid-template-columns: 1fr; }
   .evidence { grid-template-columns: 1fr; max-width: 760px; }
   .sia, .machine, .film { grid-template-columns: 1fr; margin-left: 0; }
@@ -722,6 +743,7 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
   .glass-head, .router, .fantasy-head, .runes { max-width: 100%; }
   .router-lanes .lane { grid-template-columns: 1fr; gap: 4px; }
   .glass-grid { grid-template-columns: 1fr; }
+  .talk { grid-template-columns: 1fr; margin-top: 60px; }
   .bug { position: relative; top: 0; margin-bottom: 14px; }
   .figure-embed { height: 420px; }
   .arena-pin { padding: 11vh var(--m) 9vh; grid-template-rows: auto auto auto auto auto; }
