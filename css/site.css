@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Simo, portfolio v5: "eight worlds"
+   Mohamed, portfolio v5: "eight worlds"
    Layers: #bg (world shader, z 0) < .under (giant type, z 1) < #fg (robot + props, z 2)
    < page content (z 3) < HUD (z 20) < dialogs (top layer).
    Body text is always Plus Jakarta Sans; each world brings its own display face and colours.
@@ -177,7 +177,7 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 .start { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 120px var(--m) 56px; overflow: clip; }
 .giant {
   inset: 9vh 0 auto 0; margin: 0; text-align: center;
-  font-family: var(--font-space); font-weight: 400; font-size: clamp(6.5rem, 27vw, 30rem); line-height: 0.82; letter-spacing: 0.02em;
+  font-family: var(--font-space); font-weight: 400; font-size: clamp(4rem, 15.5vw, 17rem); line-height: 0.82; letter-spacing: 0.02em;
   filter: drop-shadow(0 0 40px rgba(110, 231, 255, 0.18));
 }
 .giant-in {
@@ -673,14 +673,6 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
 
 /* the robot keeps the right-hand quarter of the glass lab on wide screens */
 @media (min-width: 1101px) { .glass-grid, .gpu, .talk { max-width: min(1400px, 74vw); } }
-/* short laptop screens (1440x900): smaller title with the tagline beside it, so the Ironline screen gets the height (letterboxes cover 9vh top and bottom) */
-@media (min-width: 1101px) and (max-height: 1000px) {
-  .arena-pin { grid-template-columns: auto 1fr; grid-template-rows: auto 1fr auto auto; }
-  .arena-pin > * { grid-column: 1 / -1; }
-  .arena-title { grid-column: 1; font-size: clamp(3.6rem, 1rem + min(11vw, 13vh), 13rem); }
-  .arena-tag { grid-column: 2; grid-row: 1; align-self: end; margin: 0 0 0 40px; }
-  .screen { width: min(58vw, 1040px, calc((100svh - 410px) * 1.6)); }
-}
 
 /* ================================================================== TABLET */
 @media (max-width: 1100px) {
@@ -718,7 +710,7 @@ html[data-hud="light"] .rail a { background: rgba(0, 0, 0, 0.25); }
   .target { --tb: 46px; }
   .hud-sound { padding: 0 14px; }
   .start { padding-top: 96px; padding-bottom: 72px; }
-  .giant { inset: 13vh 0 auto 0; font-size: 31vw; }
+  .giant { inset: 13vh 0 auto 0; font-size: 15vw; }
   .start-copy { max-width: 100%; }
   .start-line { font-size: clamp(1.7rem, 8vw, 2.4rem); }
   .start-act .btn { flex: 1 1 100%; }

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Simo, portfolio v5: the conductor.
+   Mohamed, portfolio v5: the conductor.
    Scroll position decides which world you are in (and how much of the next one is
    bleeding in); the world engine paints it and moves S-01; each chapter adds its own toy.
    Without WebGL or JavaScript the page still reads top to bottom.
@@ -99,7 +99,7 @@ document.addEventListener('click', (e) => {
 
 /* ------------------------------------------------------------------ chapters */
 const CHAPTERS = {
-  start: { label: 'Deep space', accent: '#6ee7ff', light: false, line: 'Hi! I’m S-01. Simo built my body for Ironline. Click me any time.' },
+  start: { label: 'Deep space', accent: '#6ee7ff', light: false, line: 'Hi! I’m S-01. Mohamed built my body for Ironline. Click me any time.' },
   origins: { label: 'Clay', accent: '#ff7a59', light: true, line: 'This is where it started. Watch your step.' },
   simoai: { label: 'Glass lab', accent: '#28ffd2', light: false, line: 'Six models, one 16 GB card. We take turns.' },
   ironline: { label: 'Night arena', accent: '#ff4b1f', light: false, line: 'The rules run 128 times a second. I counted.' },
@@ -108,9 +108,9 @@ const CHAPTERS = {
   shipped: { label: 'Concrete', accent: '#dd614c', light: true, line: 'Everything here is live. Go and click something.' },
   studio: { label: 'Paper and ink', accent: '#2547d0', light: true, line: 'Every frame of those films was drawn by code.' },
   method: { label: 'Editorial', accent: '#e9e4d8', light: false, line: '' },
-  contact: { label: 'Back to space', accent: '#6ee7ff', light: false, line: 'Say hi to Simo for me.' },
+  contact: { label: 'Back to space', accent: '#6ee7ff', light: false, line: 'Say hi to Mohamed for me.' },
 };
-const LINES = { "start": [ "Hi! I’m S-01. Simo built my body for Ironline. Click me any time.", "Scroll down. I’ll walk.", "I have a halo here. Only here.", "Eight worlds. I’ve been to all of them." ], "origins": [ "This is where it started. Watch your step.", "Hit the blocks. They pay out.", "A Mario-style platformer in 2020. Very brave.", "Panama, then Houston. Not bad for a robot kid." ], "simoai": [ "Six models, one 16 GB card. We take turns.", "Pick a request. Watch it plan.", "The kitten was made on Simo’s GPU. No cloud.", "I asked for a circle once. Long story." ], "ironline": [ "The rules run 128 times a second. I counted.", "Shoot the bots, not me.", "Every rule here has a test. 290 of them.", "Aim for the visor." ], "mana": [ "Pick a rune and I’ll cast it.", "Three chapters so far. I’m in none of them.", "The Demon Continent is very red.", "Fire is the classic. Try healing." ], "roboroute": [ "Robot games. This is my kind of table.", "Pick a mission. Watch the search spread.", "A* heads for the goal. Dijkstra looks everywhere.", "The real one runs Python inside your browser tab.", "I’m about 14 centimetres too tall for this table." ], "shipped": [ "Everything here is live. Go and click something.", "Two colourways sold out. True story.", "Built in a day. Some of them.", "Concrete suits me." ], "studio": [ "Every frame of those films was drawn by code.", "Click the paper. Make a mess.", "The PoseSandbox film has a voice. Turn it on.", "I get a new paint job here." ], "method": [ "Read this one slowly." ], "contact": [ "Say hi to Simo for me.", "The email button works. I checked.", "Thanks for walking with me.", "Want to go again? Scroll up." ] };
+const LINES = { "start": [ "Hi! I’m S-01. Mohamed built my body for Ironline. Click me any time.", "Scroll down. I’ll walk.", "I have a halo here. Only here.", "Eight worlds. I’ve been to all of them." ], "origins": [ "This is where it started. Watch your step.", "Hit the blocks. They pay out.", "A Mario-style platformer in 2020. Very brave.", "Panama, then Houston. Not bad for a robot kid." ], "simoai": [ "Six models, one 16 GB card. We take turns.", "Pick a request. Watch it plan.", "The kitten was made on Mohamed’s GPU. No cloud.", "I asked for a circle once. Long story." ], "ironline": [ "The rules run 128 times a second. I counted.", "Shoot the bots, not me.", "Every rule here has a test. 290 of them.", "Aim for the visor." ], "mana": [ "Pick a rune and I’ll cast it.", "Three chapters so far. I’m in none of them.", "The Demon Continent is very red.", "Fire is the classic. Try healing." ], "roboroute": [ "Robot games. This is my kind of table.", "Pick a mission. Watch the search spread.", "A* heads for the goal. Dijkstra looks everywhere.", "The real one runs Python inside your browser tab.", "I’m about 14 centimetres too tall for this table." ], "shipped": [ "Everything here is live. Go and click something.", "Two colourways sold out. True story.", "Built in a day. Some of them.", "Concrete suits me." ], "studio": [ "Every frame of those films was drawn by code.", "Click the paper. Make a mess.", "The PoseSandbox film has a voice. Turn it on.", "I get a new paint job here." ], "method": [ "Read this one slowly." ], "contact": [ "Say hi to Mohamed for me.", "The email button works. I checked.", "Thanks for walking with me.", "Want to go again? Scroll up." ] };
 const lineAt = {};
 function nextLine(id) { const L = LINES[id] || LINES.start; const i = (lineAt[id] = ((lineAt[id] ?? -1) + 1) % L.length); return L[i]; }
 const parsePose = (s) => { const [x, y, h, rot] = (s || '0,-2,0.3,0').split(',').map(Number); return { x, y, h, rot }; };
@@ -483,7 +483,7 @@ function fire(x, y) {
     popText(x, y - 18, '+' + gain, combo > 2 ? 'hot' : '');
     despawn(hit, false);
     sound.fx('hit');
-    if (combo === 5) say('Five in a row. Simo would hire you.', 2200);
+    if (combo === 5) say('Five in a row. Mohamed would hire you.', 2200);
   }
 }
 // keyboard: Enter fires at the oldest bot on screen, or the centre

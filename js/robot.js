@@ -1,4 +1,4 @@
-// S-01: the guide robot, rebuilt in code from Simo's Ironline agents (reference: the agents on the
+// S-01: the guide robot, rebuilt in code from Mohamed's Ironline agents (reference: the agents on the
 // Ironline main menu). Every part is a primitive; joints are groups so the robot can walk, wave,
 // hop and look around. Materials blend between one "look" per world.
 import * as THREE from '../vendor/three.module.min.js';

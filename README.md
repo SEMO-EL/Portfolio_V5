@@ -1,7 +1,7 @@
-# Simo: eight worlds (portfolio v5)
+# Mohamed: eight worlds (portfolio v5)
 
 A scroll-through portfolio. Each chapter is its own world in its own style, and a small robot,
-S-01, rebuilt in code from Simo's Ironline agents, walks through all of them. One WebGL
+S-01, rebuilt in code from Mohamed's Ironline agents, walks through all of them. One WebGL
 background blends each world into the next as you scroll.
 
 A short boot screen covers the first second while fonts load. The Sound button in the HUD turns on
@@ -72,7 +72,7 @@ error; `node ratio.mjs 1440 900` lists stretched images; `node look.mjs 1440 900
 
 ## Credits
 
-Code and design: Claude Code, directed by Simo. Aerial photos of Casablanca, 1930: Walter
+Code and design: Claude Code, directed by Mohamed. Aerial photos of Casablanca, 1930: Walter
 Mittelholzer, ETH-Bibliothek Zürich, public domain.
 
 ## Selected projects (the one-minute page)
